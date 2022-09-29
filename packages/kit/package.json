@@ -1,0 +1,46 @@
+{
+	"name": "@produck/kit",
+	"version": "0.0.0",
+	"description": "A useful dependency injection module.",
+	"keywords": [
+		"duck",
+		"injection",
+		"kit",
+		"DI",
+		"IoC"
+	],
+	"author": "ChaosLee <chaos2lee@qq.com>",
+	"homepage": "https://github.com/produck/kit/tree/main/packages/kit#readme",
+	"license": "MIT",
+	"files": [
+		"dist/index.cjs",
+		"index.mjs",
+		"index.d.ts"
+	],
+	"types": "index.d.ts",
+	"main": "dist/index.cjs",
+	"type": "module",
+	"exports": {
+		"import": "./index.mjs",
+		"require": "./dist/index.cjs"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/produck/kit.git"
+	},
+	"scripts": {
+		"test": "node ./__tests__/@produck/kit.test.js"
+	},
+	"bugs": {
+		"url": "https://github.com/produck/kit/issues"
+	},
+	"devDependencies": {
+		"c8": "^7.12.0",
+		"eslint": "^8.24.0",
+		"mocha": "^10.0.0",
+		"rollup": "^2.79.1"
+	}
+}
