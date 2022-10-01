@@ -34,8 +34,8 @@
 		"url": "git+https://github.com/produck/kit.git"
 	},
 	"scripts": {
-		"build:version": "npm run build:version && node script/version.mjs",
-		"build": "rollup -c script/rollup.config.mjs",
+		"build:version": "node script/version.mjs",
+		"build": "npm run build:version && rollup -c script/rollup.config.mjs",
 		"lint": "eslint --fix **/*.mjs",
 		"test": "npm run build:version && mocha \"**/*-spec.mjs\" -t 999999999 ",
 		"coverage": "c8 --reporter=lcov npm test",
