@@ -1,7 +1,7 @@
 import assert from 'node:assert';
 import { describe, it } from 'mocha';
-import * as Kit from '../src/index.mjs';
-import version from '../src/version.mjs';
+import * as Kit from '../index.mjs';
+import version from '../version.mjs';
 
 describe('Kit::', function () {
 	it('should create a Kit from global Kit', function () {

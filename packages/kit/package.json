@@ -13,8 +13,9 @@
 	"homepage": "https://github.com/produck/kit/tree/main/packages/kit#readme",
 	"license": "MIT",
 	"files": [
-		"src",
 		"dist/index.cjs",
+		"index.mjs",
+		"version.mjs",
 		"index.d.ts",
 		"tsconfig.json"
 	],
@@ -33,9 +34,10 @@
 		"url": "git+https://github.com/produck/kit.git"
 	},
 	"scripts": {
+		"build:version": "npm run build:version && node script/version.mjs",
 		"build": "rollup -c script/rollup.config.mjs",
 		"lint": "eslint --fix **/*.mjs",
-		"test": "mocha \"**/*-spec.mjs\" -t 999999999 ",
+		"test": "npm run build:version && mocha \"**/*-spec.mjs\" -t 999999999 ",
 		"coverage": "c8 --reporter=lcov npm test",
 		"prepublishOnly": "npm run lint && npm test && npm run build"
 	},
