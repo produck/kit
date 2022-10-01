@@ -13,7 +13,7 @@
 	"homepage": "https://github.com/produck/kit/tree/main/packages/kit#readme",
 	"license": "MIT",
 	"files": [
-		"dist/index.cjs",
+		"dist/kit.cjs",
 		"index.mjs",
 		"version.mjs",
 		"index.d.ts",
