@@ -1,12 +1,14 @@
 interface KitProvider {
 	/**
+	 * Create a child Kit from this.
+	 * [ChildKit] --|> [This]
+	 *
 	 * @param name The name of this Kit. For debugging easily.
 	 */
 	(name: string): KitProvider & this;
 
 	/**
-	 * Create a child Kit from this.
-	 * [ChildKit] --|> [This]
+	 * A reference to self.
 	 */
 	Kit: this;
 }
