@@ -20,4 +20,7 @@ export interface GlobalKit extends KitProvider {
 	version: string;
 }
 
+/**
+ * Any new `Kit` MUST be created by the `global Kit`.
+ */
 export const global: GlobalKit;
