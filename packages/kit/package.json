@@ -15,8 +15,8 @@
 	"files": [
 		"src",
 		"dist/index.cjs",
-		"index.mjs",
-		"index.d.ts"
+		"index.d.ts",
+		"tsconfig.json"
 	],
 	"types": "index.d.ts",
 	"main": "dist/index.cjs",
@@ -33,7 +33,11 @@
 		"url": "git+https://github.com/produck/kit.git"
 	},
 	"scripts": {
-		"test": "node ./__tests__/@produck/kit.test.js"
+		"build": "rollup -c script/rollup.config.mjs",
+		"lint": "eslint --fix **/*.mjs",
+		"test": "mocha \"**/*-spec.mjs\" -t 999999999 ",
+		"coverage": "c8 --reporter=lcov npm test",
+		"prepublishOnly": "npm run lint && npm test && npm run build"
 	},
 	"bugs": {
 		"url": "https://github.com/produck/kit/issues"

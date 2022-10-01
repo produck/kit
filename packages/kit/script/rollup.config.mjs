@@ -1,9 +1,15 @@
 import { createRequire } from 'node:module';
 import path from 'node:path';
+import fs from 'node:fs';
+
 import { defineConfig } from 'rollup';
 
 const require = createRequire(import.meta.url);
 const meta = require('../package.json');
+
+const versionJSFile = path.resolve('src/version.mjs');
+
+fs.writeFileSync(versionJSFile, `export default '${meta.version}';`);
 
 const MODULE_NAME = meta.name;
 const MODULE_FILE_NAME = MODULE_NAME.replace(/@.+\//, '');

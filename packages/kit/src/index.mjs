@@ -57,7 +57,7 @@ const PROXY_HANDLER = {
 	}
 };
 
-const KitProxy = (name = '<Anonymous>', prototype = null) => {
+const KitProxy = (name = '<Anonymous>', prototype) => {
 	if (typeof name !== 'string') {
 		throwError(prototype, 'Invalid "name", one "string" expected.', TypeError);
 	}
@@ -73,6 +73,6 @@ const KitProxy = (name = '<Anonymous>', prototype = null) => {
 
 import version from './version.mjs';
 
-export const Kit = KitProxy('Kit::Global');
+export const global = KitProxy('Kit::Global', null);
 
-Kit.version = version;
+global.version = version;

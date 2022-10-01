@@ -4,6 +4,7 @@
 	"useWorkspaces": false,
 	"version": "independent",
 	"packages": [
-		"packages/kit"
+		"packages/*",
+		"example/*"
 	]
 }
