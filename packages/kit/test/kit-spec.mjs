@@ -1,5 +1,4 @@
 import assert from 'node:assert';
-import { describe, it } from 'mocha';
 import * as Kit from '../index.mjs';
 import version from '../version.mjs';
 

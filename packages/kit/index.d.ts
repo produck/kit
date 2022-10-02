@@ -5,7 +5,7 @@ interface KitProvider {
 	 *
 	 * @param name The name of this Kit. For debugging easily.
 	 */
-	(name: string): KitProvider & this;
+	(name?: string): KitProvider & this;
 
 	/**
 	 * A reference to self.

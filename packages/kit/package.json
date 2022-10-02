@@ -36,18 +36,12 @@
 	"scripts": {
 		"build:version": "node script/version.mjs",
 		"build": "npm run build:version && rollup -c script/rollup.config.mjs",
-		"lint": "eslint --fix **/*.mjs",
-		"test": "npm run build:version && mocha \"**/*-spec.mjs\" -t 999999999 ",
-		"coverage": "c8 --reporter=lcov npm test",
-		"prepublishOnly": "npm run lint && npm test && npm run build"
+		"prepublishOnly": " npm run build"
 	},
 	"bugs": {
 		"url": "https://github.com/produck/kit/issues"
 	},
 	"devDependencies": {
-		"c8": "^7.12.0",
-		"eslint": "^8.24.0",
-		"mocha": "^10.0.0",
 		"rollup": "^2.79.1"
 	}
 }
