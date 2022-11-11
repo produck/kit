@@ -15,5 +15,8 @@
 		"eslint": "^8.27.0",
 		"mocha": "^10.1.0",
 		"lerna": "^6.0.3"
-	}
+	},
+	"workspaces": [
+		"packages/*"
+	]
 }
