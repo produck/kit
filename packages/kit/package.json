@@ -20,11 +20,11 @@
 		"tsconfig.json"
 	],
 	"types": "index.d.ts",
-	"main": "dist/index.cjs",
+	"main": "dist/kit.cjs",
 	"type": "module",
 	"exports": {
 		"import": "./index.mjs",
-		"require": "./dist/index.cjs"
+		"require": "./dist/kit.cjs"
 	},
 	"publishConfig": {
 		"access": "public"

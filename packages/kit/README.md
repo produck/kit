@@ -61,7 +61,7 @@ const base = Kit.global('Base');
 base.foo = 'bar';
 
 // Inject
-AnyProvider(base);
+FooProvider(base);
 ```
 ## API
 ### .global
