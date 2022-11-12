@@ -1,5 +1,5 @@
 {
-	"name": "@produck/kit-package",
+	"name": "@produck/kit-workspace",
 	"private": true,
 	"scripts": {
 		"deps:install": "npm -v && npm i && lerna bootstrap",
