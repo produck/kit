@@ -13,18 +13,17 @@
 	"homepage": "https://github.com/produck/kit/tree/main/packages/kit#readme",
 	"license": "MIT",
 	"files": [
-		"dist/kit.cjs",
 		"index.mjs",
 		"version.mjs",
 		"index.d.ts",
 		"tsconfig.json"
 	],
 	"types": "index.d.ts",
-	"main": "dist/kit.cjs",
+	"main": "index.cjs",
 	"type": "module",
 	"exports": {
 		"import": "./index.mjs",
-		"require": "./dist/kit.cjs"
+		"require": "./index.cjs"
 	},
 	"publishConfig": {
 		"access": "public"
