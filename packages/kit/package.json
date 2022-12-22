@@ -41,6 +41,6 @@
 		"url": "https://github.com/produck/kit/issues"
 	},
 	"devDependencies": {
-		"rollup": "^3.3.0"
+		"rollup": "^3.8.0"
 	}
 }
