@@ -2,8 +2,8 @@
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/produck/kit/node.js.yml)](https://github.com/produck/kit/actions/workflows/node.js.yml)
 [![Coveralls](https://img.shields.io/coveralls/github/produck/kit)](https://coveralls.io/github/produck/kit)
 [![npm (scoped)](https://img.shields.io/npm/v/@produck/kit)](https://www.npmjs.com/package/@produck/kit)
-[![npm](https://img.shields.io/npm/dw/@produck/kit)](https://www.npmjs.com/package/@produck/kit)
-[![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg?style=flat-square)](https://lerna.js.org/)
+[![npm](https://img.shields.io/npm/dm/@produck/kit)](https://www.npmjs.com/package/@produck/kit)
+[![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lerna.js.org/)
 [![NPM](https://img.shields.io/npm/l/@produck/kit)](https://opensource.org/licenses/MIT)
 
 A module to create a injection for implemention of DI, IoC. It can easily build injection prototype chain. Each injection represents a job space, a problem scope. Child injection can access dependencis of  its prototype injection.
