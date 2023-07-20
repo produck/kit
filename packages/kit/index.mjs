@@ -1,4 +1,5 @@
 const map = new WeakMap();
+const NO_DEPENDENCE_SIGNAL = null;
 
 const throwError = (currentKit, message, Constructor = Error) => {
 	const chain = [];
@@ -19,16 +20,13 @@ const assertProperty = (any, Kit) => {
 	}
 };
 
-const has = (object, key) => Object.prototype.hasOwnProperty.call(object, key);
-const NO_DEPENDENCE_SIGNAL = null;
-
 const PROXY_HANDLER = {
 	get: (_Kit, name, Kit) =>  {
 		assertProperty(name, Kit);
 
 		const { dependencies, prototype } = _Kit.context;
 
-		if (has(dependencies, name)) {
+		if (name in dependencies) {
 			return dependencies[name];
 		}
 
@@ -47,7 +45,7 @@ const PROXY_HANDLER = {
 
 		const { dependencies } = _Kit.context;
 
-		if (has(dependencies, name)) {
+		if (name in dependencies) {
 			throwError(Kit, `There has been a dependence named "${name}".`);
 		}
 
