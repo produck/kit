@@ -33,6 +33,7 @@
 		"url": "git+https://github.com/produck/kit.git"
 	},
 	"scripts": {
+		"test": "mocha \"**/*-spec.mjs\" -t 999999999",
 		"build:version": "node script/version.mjs",
 		"build": "npm run build:version && rollup -c script/rollup.config.mjs",
 		"prepublishOnly": " npm run build"
@@ -41,6 +42,7 @@
 		"url": "https://github.com/produck/kit/issues"
 	},
 	"devDependencies": {
-		"rollup": "^3.9.0"
+		"mocha": "^10.2.0",
+		"rollup": "^3.26.3"
 	}
 }
