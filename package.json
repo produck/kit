@@ -2,18 +2,19 @@
 	"name": "@produck/kit-workspace",
 	"private": true,
 	"scripts": {
-		"deps:install": "npm -v && npm i",
+		"deps:install": "npm -v && npm install",
+		"deps:ci-install": "npm install",
 		"lint": "eslint --fix packages/**/*.mjs",
-		"test": "npm run build:version --workspaces && npm run test --workspaces",
-		"coverage": "c8 --exclude=**/*-spec** --reporter=lcov npm run test",
-		"publish": "npm run lint && npm test && lerna publish --no-private"
+		"test": "npm run --workspaces build:version && mocha \"packages/**/*-spec.mjs\" -t 999999999",
+		"coverage": "c8 --reporter=lcov npm run test",
+		"publish": "npm run lint && npm run test && lerna publish --no-private"
 	},
 	"devDependencies": {
-		"c8": "^8.0.0",
-		"eslint": "^8.45.0",
-		"lerna": "^7.1.4"
+		"c8": "^8.0.1",
+		"eslint": "^8.56.0",
+		"lerna": "^8.0.1"
 	},
 	"workspaces": [
-		"packages/*"
+		"packages/kit"
 	]
 }
