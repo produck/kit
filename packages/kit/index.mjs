@@ -14,9 +14,15 @@ const throwError = (currentKit, message, Constructor = Error) => {
 	throw new Constructor(`${message}\n[${chain.join('] --|> [')}]`);
 };
 
+const isString = any => typeof any === 'string';
+
+const TypeErrorMessage = (role, expected) => {
+	return `Invalid "${role}", one "${expected}" expected.`;
+};
+
 const assertProperty = (any, Kit) => {
-	if (typeof any !== 'string') {
-		throwError(Kit, 'Invalid "property", one "string" expected.', TypeError);
+	if (!isString(any)) {
+		throwError(Kit, TypeErrorMessage('property', 'string'), TypeError);
 	}
 };
 
@@ -56,8 +62,8 @@ const PROXY_HANDLER = {
 };
 
 const KitProxy = (name = '<Anonymous>', prototype) => {
-	if (typeof name !== 'string') {
-		throwError(prototype, 'Invalid "name", one "string" expected.', TypeError);
+	if (!isString(name)) {
+		throwError(prototype, TypeErrorMessage('name', 'string'), TypeError);
 	}
 
 	const _Kit = name => KitProxy(name, Kit);

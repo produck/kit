@@ -3,7 +3,7 @@
 	"private": true,
 	"scripts": {
 		"deps:install": "npm -v && npm install",
-		"deps:ci-install": "npm install",
+		"deps:ci-install": "npm install --include=optional",
 		"lint": "eslint --fix packages/**/*.mjs",
 		"test": "npm run --workspaces build:version && mocha \"packages/**/*-spec.mjs\" -t 999999999",
 		"coverage": "c8 --reporter=lcov npm run test",
@@ -13,9 +13,6 @@
 		"c8": "^8.0.1",
 		"eslint": "^8.56.0",
 		"lerna": "^8.0.1"
-	},
-	"optionalDependencies": {
-		"@nx/nx-linux-x64-gnu": "*"
 	},
 	"workspaces": [
 		"packages/kit"
