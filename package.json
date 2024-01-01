@@ -14,6 +14,9 @@
 		"eslint": "^8.56.0",
 		"lerna": "^8.0.1"
 	},
+	"optionalDependencies": {
+		"@nx/nx-linux-x64-gnu": "*"
+	},
 	"workspaces": [
 		"packages/kit"
 	]
