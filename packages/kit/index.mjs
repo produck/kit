@@ -42,7 +42,7 @@ const PROXY_HANDLER = {
 
 		try {
 			return prototype[name];
-		} catch (error) {
+		} catch {
 			throwError(Kit, `No dependence named "${name}" is defined.`, ReferenceError);
 		}
 	},
@@ -58,7 +58,7 @@ const PROXY_HANDLER = {
 		dependencies[name] = dependence;
 
 		return true;
-	}
+	},
 };
 
 const KitProxy = (name = '<Anonymous>', prototype) => {

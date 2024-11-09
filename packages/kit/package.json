@@ -22,6 +22,7 @@
 	"main": "index.cjs",
 	"type": "module",
 	"exports": {
+		"types": "./index.d.ts",
 		"import": "./index.mjs",
 		"require": "./index.cjs"
 	},
@@ -33,7 +34,6 @@
 		"url": "git+https://github.com/produck/kit.git"
 	},
 	"scripts": {
-		"test": "mocha \"**/*-spec.mjs\" -t 999999999",
 		"build:version": "node script/version.mjs",
 		"build": "npm run build:version && rollup -c script/rollup.config.mjs",
 		"prepublishOnly": " npm run build"
@@ -42,7 +42,6 @@
 		"url": "https://github.com/produck/kit/issues"
 	},
 	"devDependencies": {
-		"mocha": "^10.2.0",
-		"rollup": "^4.9.2"
+		"rollup": "^4.24.4"
 	}
 }

@@ -18,7 +18,7 @@ const moduleList = [
 		output: path.resolve('index.cjs'),
 		format: 'cjs',
 		isExternal: true,
-	}
+	},
 ];
 
 export default moduleList.map(config => {
@@ -28,7 +28,7 @@ export default moduleList.map(config => {
 			file: config.output,
 			format: config.format,
 			name: config.name,
-			banner: BANNER
-		}
+			banner: BANNER,
+		},
 	});
 });

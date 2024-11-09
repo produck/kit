@@ -5,16 +5,20 @@
 		"deps:install": "npm -v && npm install",
 		"deps:ci-install": "npm install --include=optional",
 		"lint": "eslint --fix packages/**/*.mjs",
-		"test": "npm run --workspaces build:version && mocha \"packages/**/*-spec.mjs\" -t 999999999",
+		"test": "npm run --workspaces build:version --if-present && npm test --workspaces --if-present",
 		"coverage": "c8 --reporter=lcov npm run test",
 		"publish": "npm run lint && npm run test && lerna publish --no-private"
 	},
 	"devDependencies": {
-		"c8": "^8.0.1",
-		"eslint": "^8.56.0",
-		"lerna": "^8.0.1"
+		"@eslint/js": "^9.14.0",
+		"@produck/eslint-rules": "^0.1.0",
+		"c8": "^10.1.2",
+		"eslint": "^9.14.0",
+		"globals": "^15.12.0",
+		"lerna": "^8.1.9"
 	},
 	"workspaces": [
-		"packages/kit"
+		"packages/kit",
+		"test"
 	]
 }
