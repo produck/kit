@@ -5,6 +5,6 @@ import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
 const meta = require('../package.json');
 
-const versionJSFile = path.resolve('version.mjs');
+const versionJSFile = path.resolve('version.gen.mjs');
 
 fs.writeFileSync(versionJSFile, `export default '${meta.version}';`);

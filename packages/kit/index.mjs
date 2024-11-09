@@ -75,7 +75,7 @@ const KitProxy = (name = '<Anonymous>', prototype) => {
 	return Kit;
 };
 
-import version from './version.mjs';
+import version from './version.gen.mjs';
 
 export const global = KitProxy('Kit::Global', null);
 

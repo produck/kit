@@ -6,7 +6,7 @@
 	"license": "MIT",
 	"devDependencies": {
 		"@types/mocha": "^10.0.9",
-		"mocha": "^10.7.3"
+		"mocha": "^10.8.2"
 	},
 	"dependencies": {
 		"@produck/kit": "^0.1.7"

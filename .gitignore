@@ -105,3 +105,10 @@ dist
 
 .vscode
 .debug.*
+
+# Vscode
+.vscode
+
+# Specific ignored / generated.
+*.ign*
+*.gen*
