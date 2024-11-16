@@ -1,4 +1,4 @@
-interface KitProvider {
+export interface KitProvider {
 	/**
 	 * Create a child Kit from this.
 	 * [ChildKit] --|> [This]

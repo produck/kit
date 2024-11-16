@@ -1,6 +1,6 @@
 import globals from 'globals';
 import pluginJs from '@eslint/js';
-import tseslint from 'typescript-eslint';
+// import tseslint from 'typescript-eslint';
 import ProduckRules from '@produck/eslint-rules';
 
 import { includeIgnoreFile } from '@eslint/compat';
@@ -14,9 +14,9 @@ const gitignorePath = path.resolve(__dirname, '.gitignore');
 /** @type {import('eslint').Linter.Config[]} */
 export default [
 	includeIgnoreFile(gitignorePath),
-	{files: ['**/*.{js,mjs,ts}']},
+	{files: ['**/*.{js,mjs}']},
 	{languageOptions: { globals: {...globals.browser, ...globals.node} }},
 	pluginJs.configs.recommended,
-	...tseslint.configs.recommended,
+	// ...tseslint.configs.recommended,
 	ProduckRules,
 ];
