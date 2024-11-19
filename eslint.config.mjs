@@ -1,6 +1,6 @@
 import globals from 'globals';
 import pluginJs from '@eslint/js';
-// import tseslint from 'typescript-eslint';
+import tseslint from 'typescript-eslint';
 import ProduckRules from '@produck/eslint-rules';
 
 import { includeIgnoreFile } from '@eslint/compat';
@@ -17,6 +17,6 @@ export default [
 	{files: ['**/*.{js,mjs}']},
 	{languageOptions: { globals: {...globals.browser, ...globals.node} }},
 	pluginJs.configs.recommended,
-	// ...tseslint.configs.recommended,
+	...tseslint.configs.recommended,
 	ProduckRules,
 ];
