@@ -16,8 +16,7 @@
 		"index.mjs",
 		"version.gen.mjs",
 		"index.gen.cjs",
-		"index.d.ts",
-		"tsconfig.json"
+		"index.d.ts"
 	],
 	"types": "index.d.ts",
 	"main": "index.gen.cjs",
