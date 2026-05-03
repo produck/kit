@@ -15,16 +15,15 @@
 	"files": [
 		"index.mjs",
 		"version.gen.mjs",
-		"index.gen.cjs",
 		"index.d.ts"
 	],
 	"types": "index.d.ts",
-	"main": "index.gen.cjs",
 	"type": "module",
 	"exports": {
-		"types": "./index.d.ts",
-		"import": "./index.mjs",
-		"require": "./index.gen.cjs"
+		".": {
+			"types": "./index.d.ts",
+			"import": "./index.mjs"
+		}
 	},
 	"publishConfig": {
 		"access": "public"
@@ -34,11 +33,14 @@
 		"url": "git+https://github.com/produck/kit.git"
 	},
 	"scripts": {
-		"build:version": "node script/version.mjs",
-		"build": "npm run build:version && rollup -c script/rollup.config.mjs",
+		"build": "node script/version.mjs",
 		"prepublishOnly": " npm run build"
 	},
 	"bugs": {
 		"url": "https://github.com/produck/kit/issues"
+	},
+	"dependencies": {
+		"@produck/ow": "^0.2.3",
+		"@produck/type-error": "^0.1.5"
 	}
 }
