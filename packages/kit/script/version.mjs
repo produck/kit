@@ -1,10 +1,12 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { createRequire } from 'node:module';
+import { fileURLToPath } from 'node:url';
 
-const require = createRequire(import.meta.url);
-const meta = require('../package.json');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-const versionJSFile = path.resolve('version.gen.mjs');
+const packageJSONFile = path.resolve(__dirname, '../package.json');
+const meta = JSON.parse(fs.readFileSync(packageJSONFile, 'utf8'));
+const versionJSFile = path.resolve(__dirname, '../src/version.gen.mjs');
 
 fs.writeFileSync(versionJSFile, `export default '${meta.version}';`);

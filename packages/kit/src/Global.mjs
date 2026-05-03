@@ -1,5 +1,7 @@
+import * as Ow from '@produck/ow';
+import * as TypeError from '@produck/type-error';
+
 const map = new WeakMap();
-const NO_DEPENDENCE_SIGNAL = null;
 
 const throwError = (currentKit, message, Constructor = Error) => {
 	const chain = [];
@@ -11,25 +13,13 @@ const throwError = (currentKit, message, Constructor = Error) => {
 		currentKit = prototype;
 	}
 
-	throw new Constructor(`${message}\n[${chain.join('] --|> [')}]`);
+	Ow.throw(new Constructor(`${message}\n[${chain.join('] --|> [')}]`));
 };
 
 const isString = any => typeof any === 'string';
 
-const TypeErrorMessage = (role, expected) => {
-	return `Invalid "${role}", one "${expected}" expected.`;
-};
-
-const assertProperty = (any, Kit) => {
-	if (!isString(any)) {
-		throwError(Kit, TypeErrorMessage('property', 'string'), TypeError);
-	}
-};
-
 const PROXY_HANDLER = {
 	get: (_Kit, name, Kit) =>  {
-		assertProperty(name, Kit);
-
 		const { dependencies, prototype } = _Kit.context;
 
 		if (name in dependencies) {
@@ -37,7 +27,7 @@ const PROXY_HANDLER = {
 		}
 
 		if (prototype === null) {
-			throw NO_DEPENDENCE_SIGNAL;
+			throw null;
 		}
 
 		try {
@@ -47,8 +37,6 @@ const PROXY_HANDLER = {
 		}
 	},
 	set: (_Kit, name, dependence, Kit) => {
-		assertProperty(name, Kit);
-
 		const { dependencies } = _Kit.context;
 
 		if (name in dependencies) {
@@ -63,7 +51,7 @@ const PROXY_HANDLER = {
 
 const KitProxy = (name = '<Anonymous>', prototype) => {
 	if (!isString(name)) {
-		throwError(prototype, TypeErrorMessage('name', 'string'), TypeError);
+		throwError(prototype, TypeError.ErrorMessage('name', 'string'), TypeError);
 	}
 
 	const _Kit = name => KitProxy(name, Kit);
@@ -78,5 +66,6 @@ const KitProxy = (name = '<Anonymous>', prototype) => {
 import version from './version.gen.mjs';
 
 export const global = KitProxy('Kit::Global', null);
+export const isKit = value => map.has(value);
 
 global.version = version;
