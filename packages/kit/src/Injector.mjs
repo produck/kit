@@ -8,50 +8,34 @@ function isPropertyType(value) {
 	return PROPERTY_TYPE_LIST.includes(typeof value);
 }
 
-function normalizeRequired(value) {
-	const _value = [];
+const I_KIT = Symbol('#kit');
 
-	if (Array.isArray(value)) {
-		for (const index in value) {
-			if (isPropertyType(value[index])) {
-				_value[index] = value[index];
+export class KitInjector {
+	constructor(kit, required) {
+		if (!isKit(kit)) {
+			ThrowTypeError('args[0] as kit', 'Kit');
+		}
+
+		if (!Array.isArray(required)) {
+			ThrowTypeError('args[1] as required', `${PROPERTY_TYPE_DESCRIPTION}[]`);
+		}
+
+		for (const index in required) {
+			if (!isPropertyType(required[index])) {
+				ThrowTypeError(`args[1][${index}]`, PROPERTY_TYPE_DESCRIPTION);
 			}
 
-			ThrowTypeError(`options.required[${index}]`, PROPERTY_TYPE_DESCRIPTION);
+			void kit[required[index]];
 		}
-	} else {
-		ThrowTypeError('options.required', `${PROPERTY_TYPE_DESCRIPTION}[]`);
+
+		this[I_KIT] = kit;
 	}
 
-	return _value;
-}
+	bind(fn, thisArg = undefined) {
+		if (typeof fn !== 'function') {
+			ThrowTypeError('args[0] as fn', 'function');
+		}
 
-function accessPropertyOfKit(kit, list) {
-	for (const key of list) {
-		void kit[key];
+		return fn.bind(thisArg, this[I_KIT]);
 	}
-}
-
-function assertIsKit(value, position) {
-	if (!isKit(value)) {
-		ThrowTypeError(`${position} as kit`, 'Kit');
-	}
-}
-
-export function apply(kit, fn, args = [], required = []) {
-	assertIsKit(kit, 'args[0]');
-	accessPropertyOfKit(kit, normalizeRequired(required));
-
-	const [thisArg, ...restArgs] = args;
-
-	return fn.call(thisArg, kit, ...restArgs);
-}
-
-export function bind(kit, fn, args = [], required = []) {
-	assertIsKit(kit, 'args[0]');
-	accessPropertyOfKit(kit, normalizeRequired(required));
-
-	const [thisArg, ...restArgs] = args;
-
-	return fn.bind(thisArg, kit, ...restArgs);
 }

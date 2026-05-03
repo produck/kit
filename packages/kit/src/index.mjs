@@ -1,2 +1,13 @@
-export { global, global as default } from './Global.mjs';
-export { bind, apply } from './Picker.mjs';
+import { KitProxy, isKit } from './KitProxy.mjs';
+import { KitInjector } from './Injector.mjs';
+import version from './version.gen.mjs';
+
+const global = KitProxy('Kit::Global', null);
+
+global.version = version;
+
+export { global, global as default, isKit };
+
+export function Injector(kit = global, required = []) {
+	return new KitInjector(kit, required);
+}

@@ -1,16 +1,16 @@
 import * as Ow from '@produck/ow';
 import * as TE from '@produck/type-error';
 
-const map = new WeakMap();
+const KitInternals = new WeakMap();
 
 const throwError = (currentKit, message, Constructor = Error) => {
 	const chain = [];
 
 	while (currentKit !== null) {
-		const { name, prototype } = map.get(currentKit).context;
+		const { name, parent } = KitInternals.get(currentKit).context;
 
 		chain.push(name);
-		currentKit = prototype;
+		currentKit = parent;
 	}
 
 	Ow.throw(new Constructor(`${message}\n[${chain.join('] --|> [')}]`));
@@ -20,18 +20,18 @@ const isString = (any) => typeof any === 'string';
 
 const PROXY_HANDLER = {
 	get: (_Kit, name, Kit) => {
-		const { dependencies, prototype } = _Kit.context;
+		const { dependencies, parent } = _Kit.context;
 
 		if (name in dependencies) {
 			return dependencies[name];
 		}
 
-		if (prototype === null) {
-			throw null;
-		}
-
 		try {
-			return prototype[name];
+			if (parent === null) {
+				Ow.Error.Range('KIT_PARENT_CHAIN_END');
+			}
+
+			return parent[name];
 		} catch {
 			throwError(Kit, `Dependence "${name}" is undefined.`, ReferenceError);
 		}
@@ -49,24 +49,19 @@ const PROXY_HANDLER = {
 	},
 };
 
-const KitProxy = (name = '<Anonymous>', prototype) => {
+export const KitProxy = (name = '<Anonymous>', parent) => {
 	if (!isString(name)) {
-		throwError(prototype, TE.ErrorMessage('name', 'string'), TypeError);
+		throwError(parent, TE.ErrorMessage('name', 'string'), TypeError);
 	}
 
 	const _Kit = (childName) => KitProxy(childName, Kit);
 	const Kit = new Proxy(_Kit, PROXY_HANDLER);
 	const dependencies = Object.assign(Object.create(null), { Kit });
 
-	_Kit.context = { name, prototype, dependencies };
-	map.set(Kit, _Kit);
+	_Kit.context = { name, parent, dependencies };
+	KitInternals.set(Kit, _Kit);
 
 	return Kit;
 };
 
-import version from './version.gen.mjs';
-
-export const global = KitProxy('Kit::Global', null);
-export const isKit = (value) => map.has(value);
-
-global.version = version;
+export const isKit = (value) => KitInternals.has(value);
