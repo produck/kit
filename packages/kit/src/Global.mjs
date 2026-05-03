@@ -1,5 +1,5 @@
 import * as Ow from '@produck/ow';
-import * as TypeError from '@produck/type-error';
+import * as TE from '@produck/type-error';
 
 const map = new WeakMap();
 
@@ -16,10 +16,10 @@ const throwError = (currentKit, message, Constructor = Error) => {
 	Ow.throw(new Constructor(`${message}\n[${chain.join('] --|> [')}]`));
 };
 
-const isString = any => typeof any === 'string';
+const isString = (any) => typeof any === 'string';
 
 const PROXY_HANDLER = {
-	get: (_Kit, name, Kit) =>  {
+	get: (_Kit, name, Kit) => {
 		const { dependencies, prototype } = _Kit.context;
 
 		if (name in dependencies) {
@@ -33,14 +33,14 @@ const PROXY_HANDLER = {
 		try {
 			return prototype[name];
 		} catch {
-			throwError(Kit, `No dependence named "${name}" is defined.`, ReferenceError);
+			throwError(Kit, `Dependence "${name}" is undefined.`, ReferenceError);
 		}
 	},
 	set: (_Kit, name, dependence, Kit) => {
 		const { dependencies } = _Kit.context;
 
 		if (name in dependencies) {
-			throwError(Kit, `There has been a dependence named "${name}".`);
+			throwError(Kit, `There has been a dependence "${name}".`);
 		}
 
 		dependencies[name] = dependence;
@@ -51,13 +51,14 @@ const PROXY_HANDLER = {
 
 const KitProxy = (name = '<Anonymous>', prototype) => {
 	if (!isString(name)) {
-		throwError(prototype, TypeError.ErrorMessage('name', 'string'), TypeError);
+		throwError(prototype, TE.ErrorMessage('name', 'string'), TypeError);
 	}
 
-	const _Kit = name => KitProxy(name, Kit);
+	const _Kit = (childName) => KitProxy(childName, Kit);
 	const Kit = new Proxy(_Kit, PROXY_HANDLER);
+	const dependencies = Object.assign(Object.create(null), { Kit });
 
-	_Kit.context = { name, prototype, dependencies: { Kit } };
+	_Kit.context = { name, prototype, dependencies };
 	map.set(Kit, _Kit);
 
 	return Kit;
@@ -66,6 +67,6 @@ const KitProxy = (name = '<Anonymous>', prototype) => {
 import version from './version.gen.mjs';
 
 export const global = KitProxy('Kit::Global', null);
-export const isKit = value => map.has(value);
+export const isKit = (value) => map.has(value);
 
 global.version = version;
