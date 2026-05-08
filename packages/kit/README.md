@@ -6,11 +6,7 @@
 [![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lerna.js.org/)
 [![NPM](https://img.shields.io/npm/l/@produck/kit)](https://opensource.org/licenses/MIT)
 
-A module to create a injection for implemention of DI, IoC. It can easily build injection prototype chain. Each injection represents a job space, a problem scope. Child injection can access dependencis of  its prototype injection.
-
-It has been published as a "[Dual CommonJS/ES module](https://nodejs.org/dist/latest-v16.x/docs/api/packages.html#dual-commonjses-module-packages)" package but ESM first. It can work in "node.js" and browsers. It is also very friendly with "tree shaking", using "[Rollup](https://rollupjs.org/guide/en/)".
-
-A Kit, the injection is ``IMMUTABLE``.
+A dependency injection module based on prototype-chain delegation. Each Kit represents a scope. A child Kit can read dependencies registered on any ancestor Kit.
 
 ## Installation
 ```
@@ -18,69 +14,101 @@ $ npm install @produck/kit
 ```
 
 ## Usage
-### Import / require
-As esModule,
-```js
-import * as Kit from '@produck/kit';
-```
-As CommonJs,
-```js
-const Kit = require('@produck/kit');
-```
-### Prepare / Inject / Spread
-The chain is like ``[Child] --|> [Base] --|> [Global]``.
-* Inject ``[Child]`` to ``FooProvider()``.
-* Inject ``[Base]`` to ``BarProvider()``.
+
 ```js
 import * as Kit from '@produck/kit';
 
-function BarProvider(Kit) {
-	console.log(Kit.Kit); // => Child Kit
-	console.log(Kit.version); // => @produck/kit version
-	console.log(Kit.foo); // => 'bar'
-	console.log(Kit.baz); // => 'qux'
+function BarProvider(kit) {
+	console.log(kit.version); // => @produck/kit version (inherited from global)
+	console.log(kit.foo);     // => 'bar' (inherited from base)
+	console.log(kit.baz);     // => 'qux' (own)
 }
 
-function FooProvider({ Kit, version, foo }) {
-	// Spread
-	console.log(version); // => @produck/kit version.
-	console.log(foo); // => 'bar'
+function FooProvider(kit) {
+	console.log(kit.foo); // => 'bar'
 
-	// Create a child Kit by `Base Kit`
-	const child = Kit('Child');
+	const child = kit('Child');  // create a child Kit
 
-	child.baz = 'qux';
+	child.baz = 'qux';           // register dependency on child
 
-	// Inject
 	BarProvider(child);
 }
 
-// Prepare
 const base = Kit.global('Base');
 
 base.foo = 'bar';
 
-// Inject
 FooProvider(base);
 ```
-## API
-### .global
-Global root Kit instance.
 
-### .global.version
+The delegation chain for the example above:
+```
+[Child] --|> [Base] --|> [Kit::Global]
+```
+
+## API
+
+### `global`
+
+The root Kit instance. All user Kits are descendants of this.
+
+### `global.version`
+
 Version string of `@produck/kit`.
 
-### .Kit([name: string]): Kit
-Create a child Kit from current Kit.
+### `kit(name?: string): Kit`
 
-### .setDiagram(diagram?: (kit) => string)
-Set global error diagram renderer. Omit argument to reset to default empty renderer.
+Create a named child Kit from the current Kit instance.
 
-### .isKit(value): boolean
-Runtime check for Kit proxy instances.
+### `setDiagram(diagram?: (kit) => string)`
 
-### .Injector(kit = global, required = [])
-Create an injector helper and `bind(fn, thisArg?)` with the Kit pre-injected as first argument.
+Set a global error-message diagram renderer. Called with no argument resets to the default (outputs nothing). Use [`@produck/kit-diagram`](https://www.npmjs.com/package/@produck/kit-diagram) for pre-built renderers.
+
+```js
+import * as Kit from '@produck/kit';
+import { chainToRoot } from '@produck/kit-diagram';
+
+Kit.setDiagram(chainToRoot);
+```
+
+### `isKit(value): boolean`
+
+Returns `true` if `value` is a Kit proxy instance.
+
+### `Injector(kit = global, required = [])`
+
+Creates a `KitInjector` that validates `required` dependencies exist on `kit` at construction time.
+
+`required` is an array of `string | number | symbol` property keys.
+
+```js
+import * as Kit from '@produck/kit';
+
+async function createOrder(kit, payload) {
+	const order = await kit.db.insert(payload);
+
+	kit.logger.info(`Order ${order.id} created`);
+
+	return order;
+}
+
+const kit = Kit.global('OrderScope');
+
+kit.db     = myDatabase;
+kit.logger = myLogger;
+
+// Validates that 'db' and 'logger' exist on kit immediately
+const injector = Kit.Injector(kit, ['db', 'logger']);
+
+// Pre-inject kit as first argument; call-site args follow
+const handler = injector.bind(createOrder);
+
+app.post('/orders', (req, res) => handler(req.body).then(o => res.json(o)));
+```
+
+#### `injector.bind(fn, thisArg?)`
+
+Returns a new function with `kit` pre-injected as the first argument. Additional call-site arguments are appended after it.
 
 ## License
 [MIT](https://github.com/produck/kit/blob/main/LICENSE)
