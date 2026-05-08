@@ -32,7 +32,7 @@ describe('@produck/kit-diagram', () => {
 	it('should make chain-to-site diagram', () => {
 		assert.equal(
 			chainToSite(leaf),
-			'[Root] --|> [Parent] --|> [Leaf]',
+		'[Root] <|-- [Parent] <|-- [Leaf]',
 		);
 	});
 
@@ -52,7 +52,7 @@ describe('@produck/kit-diagram', () => {
 
 	it('should reflect raw behavior for invalid kit context', () => {
 		assert.equal(chainToRoot({}), '[]');
-		assert.equal(chainToSite({}), '[]');
+		assert.equal(chainToSite({}), '[]'); // single node, no arrow rendered
 		assert.equal(vertical({}), '');
 		assert.equal(overview({}), '[Site::undefined]\n[]\n[Root::undefined]');
 	});

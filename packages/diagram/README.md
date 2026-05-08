@@ -28,14 +28,13 @@ const payment = Kit.global('PaymentKit');
 const order = payment('OrderKit');
 
 console.log(empty(order));
-console.log(JSON.stringify(empty(order)));
-// ""
+// (empty string)
 
 console.log(chainToRoot(order));
 // [OrderKit] --|> [PaymentKit] --|> [Kit::Global]
 
 console.log(chainToSite(order));
-// [Kit::Global] --|> [PaymentKit] --|> [OrderKit]
+// [Kit::Global] <|-- [PaymentKit] <|-- [OrderKit]
 
 console.log(vertical(order));
 // [OrderKit]

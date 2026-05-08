@@ -27,7 +27,7 @@ export function chainToRoot(kit) {
 }
 
 export function chainToSite(kit) {
-	return `[${chainOf(kit).reverse().join('] --|> [')}]`;
+	return `[${chainOf(kit).reverse().join('] <|-- [')}]`;
 }
 
 export function vertical(kit) {
