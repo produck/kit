@@ -1,5 +1,3 @@
-import version from './version.gen.mjs';
-
 const SYM_KIT = Symbol.for('@produck/kit/internals');
 
 const chainOf = (kit) => {
@@ -45,5 +43,3 @@ export function overview(kit) {
 		`[Root::${chain[chain.length - 1]}]`,
 	].join('\n');
 }
-
-export { version };

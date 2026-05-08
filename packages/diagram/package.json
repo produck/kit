@@ -33,9 +33,8 @@
 		"url": "git+https://github.com/produck/kit.git"
 	},
 	"scripts": {
-		"build": "node script/version.mjs",
 		"test": "node --test test/*.spec.mjs",
-		"prepublishOnly": "npm run build"
+		"test:only": "node --test --test-only test/*.spec.mjs"
 	},
 	"bugs": {
 		"url": "https://github.com/produck/kit/issues"

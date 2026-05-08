@@ -6,18 +6,18 @@
 		"deps:ci-install": "npm install --include=optional",
 		"lint": "eslint --fix",
 		"test": "npm run --workspaces build:version --if-present && npm test --workspaces --if-present",
-		"coverage": "c8 --reporter=lcov npm run test",
+		"test:only": "npm run --workspaces test:only --if-present",
+		"coverage": "c8 npm run test",
 		"publish": "npm run lint && npm run test && lerna publish --no-private"
 	},
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
 		"@produck/eslint-rules": "^0.2.7",
-		"@types/mocha": "^10.0.10",
 		"c8": "^11.0.0",
 		"eslint": "^10.3.0",
 		"globals": "^17.6.0",
 		"lerna": "^9.0.7",
-		"typescript-eslint": "^8.59.1"
+		"typescript-eslint": "^8.59.2"
 	},
 	"workspaces": [
 		"packages/kit",

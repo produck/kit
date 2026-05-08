@@ -28,7 +28,8 @@ const payment = Kit.global('PaymentKit');
 const order = payment('OrderKit');
 
 console.log(empty(order));
-// [<EmptyKitDiagram>]
+console.log(JSON.stringify(empty(order)));
+// ""
 
 console.log(chainToRoot(order));
 // [OrderKit] --|> [PaymentKit] --|> [Kit::Global]

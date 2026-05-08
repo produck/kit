@@ -18,7 +18,7 @@ describe('@produck/kit-diagram', () => {
 	it('should make empty diagram', () => {
 		assert.equal(
 			empty(leaf),
-			'[<EmptyKitDiagram>]',
+			'',
 		);
 	});
 
@@ -50,7 +50,10 @@ describe('@produck/kit-diagram', () => {
 		);
 	});
 
-	it('should fallback to empty for invalid kit context', () => {
-		assert.equal(chainToRoot({}), '[<EmptyKitDiagram>]');
+	it('should reflect raw behavior for invalid kit context', () => {
+		assert.equal(chainToRoot({}), '[]');
+		assert.equal(chainToSite({}), '[]');
+		assert.equal(vertical({}), '');
+		assert.equal(overview({}), '[Site::undefined]\n[]\n[Root::undefined]');
 	});
 });
