@@ -1,0 +1,43 @@
+{
+	"name": "@produck/kit-diagram",
+	"version": "0.1.0",
+	"description": "ASCII relation diagrams for @produck/kit chain debugging.",
+	"keywords": [
+		"duck",
+		"kit",
+		"diagram",
+		"ascii",
+		"debug"
+	],
+	"author": "ChaosLee <chaos2lee@qq.com>",
+	"homepage": "https://github.com/produck/kit/tree/main/packages/diagram#readme",
+	"license": "MIT",
+	"files": [
+		"index.mjs",
+		"src",
+		"index.d.ts"
+	],
+	"types": "index.d.ts",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./index.d.ts",
+			"import": "./index.mjs"
+		}
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/produck/kit.git"
+	},
+	"scripts": {
+		"build": "node script/version.mjs",
+		"test": "node --test test/*.spec.mjs",
+		"prepublishOnly": "npm run build"
+	},
+	"bugs": {
+		"url": "https://github.com/produck/kit/issues"
+	}
+}
