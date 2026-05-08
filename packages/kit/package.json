@@ -34,6 +34,8 @@
 	},
 	"scripts": {
 		"build": "node script/version.mjs",
+		"test": "node test/index.mjs",
+		"test:only": "node --test-only test/index.mjs",
 		"prepublishOnly": " npm run build"
 	},
 	"bugs": {

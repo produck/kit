@@ -1,8 +1,8 @@
-import assert from 'node:assert';
-import { describe, it } from 'mocha';
+import assert from 'node:assert/strict';
+import { describe, it } from 'node:test';
 import * as KitDiagram from '@produck/kit-diagram';
 
-import * as Kit from '../index.mjs';
+import * as Kit from '../src/index.mjs';
 
 describe('Kit::', function () {
 	it('should create a Kit from global Kit', function () {
@@ -14,14 +14,14 @@ describe('Kit::', function () {
 	it('should throw if bad name.', function () {
 		assert.throws(() => Kit.global(1), {
 			name: 'TypeError',
-			message: 'Invalid "name", one "string" expected.\n[<EmptyKitDiagram>]',
+			message: 'Invalid "name", one "string" expected.\n',
 		});
 	});
 
 	it('should throw if accessing bad dep.', function () {
 		assert.throws(() => Kit.global().foo, {
 			name: 'ReferenceError',
-			message: 'No dependence named "foo" is defined.\n[<EmptyKitDiagram>]',
+			message: 'Dependence "foo" is undefined.\n',
 		});
 	});
 
@@ -32,14 +32,21 @@ describe('Kit::', function () {
 
 		assert.throws(() => kit.bar = 'baz', {
 			name: 'Error',
-			message: 'There has been a dependence named "bar".\n[<EmptyKitDiagram>]',
+			message: 'There has been a dependence named "bar".\n',
 		});
 	});
 
 	it('should throw if accessing by symbol key.', function () {
 		assert.throws(() => Kit.global()[Symbol()], {
 			name: 'TypeError',
-			message: 'Invalid "property", one "string" expected.\n[<EmptyKitDiagram>]',
+			message: 'Cannot convert a Symbol value to a string',
+		});
+	});
+
+	it('should throw if setDiagram receives non-function.', function () {
+		assert.throws(() => Kit.setDiagram(42), {
+			name: 'TypeError',
+			message: 'Invalid "diagram", one function expected.',
 		});
 	});
 
@@ -48,14 +55,14 @@ describe('Kit::', function () {
 
 		assert.throws(() => Kit.global('scope').foo, {
 			name: 'ReferenceError',
-			message: 'No dependence named "foo" is defined.\n[scope] --|> [Kit::Global]',
+			message: 'Dependence "foo" is undefined.\n[scope] --|> [Kit::Global]',
 		});
 
 		Kit.setDiagram();
 
 		assert.throws(() => Kit.global('scope2').foo, {
 			name: 'ReferenceError',
-			message: 'No dependence named "foo" is defined.\n[<EmptyKitDiagram>]',
+			message: 'Dependence "foo" is undefined.\n',
 		});
 	});
 });

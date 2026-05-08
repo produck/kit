@@ -20,6 +20,13 @@ export interface GlobalKit extends KitProvider {
 	version: string;
 }
 
+export interface KitInjector {
+	bind<T extends (...args: unknown[]) => unknown>(
+		fn: T,
+		thisArg?: unknown,
+	): (...args: Parameters<T>) => ReturnType<T>;
+}
+
 export type KitDiagramFn = (kit: unknown) => string;
 
 /**
@@ -27,4 +34,13 @@ export type KitDiagramFn = (kit: unknown) => string;
  */
 export const global: GlobalKit;
 
+export default global;
+
+export function isKit(value: unknown): value is KitProvider;
+
 export function setDiagram(diagram?: KitDiagramFn): void;
+
+export function Injector(
+	kit?: KitProvider,
+	required?: Array<string | symbol | number>,
+): KitInjector;

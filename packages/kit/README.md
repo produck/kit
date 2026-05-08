@@ -65,10 +65,22 @@ FooProvider(base);
 ```
 ## API
 ### .global
+Global root Kit instance.
 
 ### .global.version
+Version string of `@produck/kit`.
 
 ### .Kit([name: string]): Kit
+Create a child Kit from current Kit.
+
+### .setDiagram(diagram?: (kit) => string)
+Set global error diagram renderer. Omit argument to reset to default empty renderer.
+
+### .isKit(value): boolean
+Runtime check for Kit proxy instances.
+
+### .Injector(kit = global, required = [])
+Create an injector helper and `bind(fn, thisArg?)` with the Kit pre-injected as first argument.
 
 ## License
 [MIT](https://github.com/produck/kit/blob/main/LICENSE)

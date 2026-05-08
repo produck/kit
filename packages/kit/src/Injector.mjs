@@ -1,5 +1,5 @@
 import { ThrowTypeError } from '@produck/type-error';
-import { isKit } from './Global.mjs';
+import { isKit } from './KitProxy.mjs';
 import * as Property from './Property.mjs';
 
 const I_KIT = Symbol('#kit');
