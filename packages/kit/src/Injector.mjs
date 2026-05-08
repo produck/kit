@@ -1,12 +1,6 @@
 import { ThrowTypeError } from '@produck/type-error';
 import { isKit } from './Global.mjs';
-
-const PROPERTY_TYPE_LIST = ['number', 'string', 'symbol'];
-const PROPERTY_TYPE_DESCRIPTION = PROPERTY_TYPE_LIST.join(' | ');
-
-function isPropertyType(value) {
-	return PROPERTY_TYPE_LIST.includes(typeof value);
-}
+import * as Property from './Property.mjs';
 
 const I_KIT = Symbol('#kit');
 
@@ -17,12 +11,12 @@ export class KitInjector {
 		}
 
 		if (!Array.isArray(required)) {
-			ThrowTypeError('args[1] as required', `${PROPERTY_TYPE_DESCRIPTION}[]`);
+			ThrowTypeError('args[1] as required', `${Property.DESCRIPTION}[]`);
 		}
 
 		for (const index in required) {
-			if (!isPropertyType(required[index])) {
-				ThrowTypeError(`args[1][${index}]`, PROPERTY_TYPE_DESCRIPTION);
+			if (!Property.isPropertyType(required[index])) {
+				ThrowTypeError(`args[1][${index}]`, Property.DESCRIPTION);
 			}
 
 			void kit[required[index]];

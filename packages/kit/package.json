@@ -40,6 +40,7 @@
 		"url": "https://github.com/produck/kit/issues"
 	},
 	"dependencies": {
+		"@produck/kit-diagram": "^0.1.0",
 		"@produck/ow": "^0.2.3",
 		"@produck/type-error": "^0.1.5"
 	}

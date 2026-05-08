@@ -20,7 +20,11 @@ export interface GlobalKit extends KitProvider {
 	version: string;
 }
 
+export type KitDiagramFn = (kit: unknown) => string;
+
 /**
  * Any new `Kit` MUST be created by the `global Kit`.
  */
 export const global: GlobalKit;
+
+export function setDiagram(diagram?: KitDiagramFn): void;

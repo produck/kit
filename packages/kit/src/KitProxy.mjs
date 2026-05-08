@@ -1,29 +1,36 @@
 import * as Ow from '@produck/ow';
-import * as TE from '@produck/type-error';
+import { ErrorMessage } from '@produck/type-error';
+import * as KitDiagram from '@produck/kit-diagram';
 
 const KitInternals = new WeakMap();
+const SYM_KIT = Symbol.for('@produck/kit/internals');
 
-const throwError = (currentKit, message, Constructor = Error) => {
-	const chain = [];
+let MakeDiagram = KitDiagram.empty;
 
-	while (currentKit !== null) {
-		const { name, parent } = KitInternals.get(currentKit).context;
-
-		chain.push(name);
-		currentKit = parent;
+export const setDiagram = (diagram = KitDiagram.empty) => {
+	if (typeof diagram !== 'function') {
+		Ow.throw(new TypeError('Invalid "diagram", one function expected.'));
 	}
 
-	Ow.throw(new Constructor(`${message}\n[${chain.join('] --|> [')}]`));
+	MakeDiagram = diagram;
 };
 
-const isString = (any) => typeof any === 'string';
+const throwError = (currentKit, message, Constructor = Error) => {
+	Ow.throw(new Constructor(`${message}\n${MakeDiagram(currentKit)}`));
+};
 
 const PROXY_HANDLER = {
-	get: (_Kit, name, Kit) => {
+	get: (_Kit, property, Kit) => {
+		if (property === SYM_KIT) {
+			const { name, parent } = _Kit.context;
+
+			return { name, parent };
+		}
+
 		const { dependencies, parent } = _Kit.context;
 
-		if (name in dependencies) {
-			return dependencies[name];
+		if (property in dependencies) {
+			return dependencies[property];
 		}
 
 		try {
@@ -31,32 +38,34 @@ const PROXY_HANDLER = {
 				Ow.Error.Range('KIT_PARENT_CHAIN_END');
 			}
 
-			return parent[name];
+			return parent[property];
 		} catch {
-			throwError(Kit, `Dependence "${name}" is undefined.`, ReferenceError);
+			throwError(Kit, `Dependence "${property}" is undefined.`, ReferenceError);
 		}
 	},
-	set: (_Kit, name, dependence, Kit) => {
+	set: (_Kit, property, dependence, Kit) => {
 		const { dependencies } = _Kit.context;
 
-		if (name in dependencies) {
-			throwError(Kit, `There has been a dependence "${name}".`);
+		if (property in dependencies) {
+			throwError(Kit, `There has been a dependence named "${property}".`);
 		}
 
-		dependencies[name] = dependence;
+		dependencies[property] = dependence;
 
 		return true;
 	},
 };
 
 export const KitProxy = (name = '<Anonymous>', parent) => {
-	if (!isString(name)) {
-		throwError(parent, TE.ErrorMessage('name', 'string'), TypeError);
+	if (typeof name !== 'string') {
+		throwError(parent, ErrorMessage('name', 'string'), TypeError);
 	}
 
 	const _Kit = (childName) => KitProxy(childName, Kit);
 	const Kit = new Proxy(_Kit, PROXY_HANDLER);
-	const dependencies = Object.assign(Object.create(null), { Kit });
+	const dependencies = Object.create(null);
+
+	dependencies.Kit = Kit;
 
 	_Kit.context = { name, parent, dependencies };
 	KitInternals.set(Kit, _Kit);

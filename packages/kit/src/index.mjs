@@ -1,4 +1,4 @@
-import { KitProxy, isKit } from './KitProxy.mjs';
+import { KitProxy, isKit, setDiagram } from './KitProxy.mjs';
 import { KitInjector } from './Injector.mjs';
 import version from './version.gen.mjs';
 
@@ -6,7 +6,7 @@ const global = KitProxy('Kit::Global', null);
 
 global.version = version;
 
-export { global, global as default, isKit };
+export { global, global as default, isKit, setDiagram };
 
 export function Injector(kit = global, required = []) {
 	return new KitInjector(kit, required);
