@@ -1,5 +1,5 @@
 import * as Ow from '@produck/ow';
-import { ErrorMessage } from '@produck/type-error';
+import { ThrowTypeError } from '@produck/type-error';
 import * as KitDiagram from '@produck/kit-diagram';
 
 const KitInternals = new WeakMap();
@@ -47,7 +47,7 @@ const PROXY_HANDLER = {
 		const { dependencies } = _Kit.context;
 
 		if (property in dependencies) {
-			throwError(Kit, `There has been a dependence named "${property}".`);
+			throwError(Kit, `Dependence "${property}" exists.`);
 		}
 
 		dependencies[property] = dependence;
@@ -58,7 +58,7 @@ const PROXY_HANDLER = {
 
 export const KitProxy = (name = '<Anonymous>', parent) => {
 	if (typeof name !== 'string') {
-		throwError(parent, ErrorMessage('name', 'string'), TypeError);
+		ThrowTypeError('args[0] as name', 'string');
 	}
 
 	const _Kit = (childName) => KitProxy(childName, Kit);

@@ -15,10 +15,7 @@ export class KitInjector {
 		}
 
 		for (const index in required) {
-			if (!Property.isPropertyType(required[index])) {
-				ThrowTypeError(`args[1][${index}]`, Property.DESCRIPTION);
-			}
-
+			Property.assertProperty(required[index], `args[1][${index}]`);
 			void kit[required[index]];
 		}
 
