@@ -8,69 +8,69 @@ const SYM_KIT = Symbol.for('@produck/kit/internals');
 let MakeDiagram = KitDiagram.empty;
 
 export const setDiagram = (diagram = KitDiagram.empty) => {
-	if (typeof diagram !== 'function') {
-		Ow.throw(new TypeError('Invalid "diagram", one function expected.'));
-	}
+  if (typeof diagram !== 'function') {
+    Ow.throw(new TypeError('Invalid "diagram", one function expected.'));
+  }
 
-	MakeDiagram = diagram;
+  MakeDiagram = diagram;
 };
 
 const throwError = (currentKit, message, Constructor = Error) => {
-	Ow.throw(new Constructor(`${message}\n${MakeDiagram(currentKit)}`));
+  Ow.throw(new Constructor(`${message}\n${MakeDiagram(currentKit)}`));
 };
 
 const PROXY_HANDLER = {
-	get: (_Kit, property, Kit) => {
-		if (property === SYM_KIT) {
-			const { name, parent } = _Kit.context;
+  get: (_Kit, property, Kit) => {
+    if (property === SYM_KIT) {
+      const { name, parent } = _Kit.context;
 
-			return { name, parent };
-		}
+      return { name, parent };
+    }
 
-		const { dependencies, parent } = _Kit.context;
+    const { dependencies, parent } = _Kit.context;
 
-		if (property in dependencies) {
-			return dependencies[property];
-		}
+    if (property in dependencies) {
+      return dependencies[property];
+    }
 
-		try {
-			if (parent === null) {
-				Ow.Error.Range('KIT_PARENT_CHAIN_END');
-			}
+    try {
+      if (parent === null) {
+        Ow.Error.Range('KIT_PARENT_CHAIN_END');
+      }
 
-			return parent[property];
-		} catch {
-			throwError(Kit, `Dependence "${property}" is undefined.`, ReferenceError);
-		}
-	},
-	set: (_Kit, property, dependence, Kit) => {
-		const { dependencies } = _Kit.context;
+      return parent[property];
+    } catch {
+      throwError(Kit, `Dependence "${property}" is undefined.`, ReferenceError);
+    }
+  },
+  set: (_Kit, property, dependence, Kit) => {
+    const { dependencies } = _Kit.context;
 
-		if (property in dependencies) {
-			throwError(Kit, `Dependence "${property}" exists.`);
-		}
+    if (property in dependencies) {
+      throwError(Kit, `Dependence "${property}" exists.`);
+    }
 
-		dependencies[property] = dependence;
+    dependencies[property] = dependence;
 
-		return true;
-	},
+    return true;
+  },
 };
 
 export const KitProxy = (name = '<Anonymous>', parent) => {
-	if (typeof name !== 'string') {
-		ThrowTypeError('args[0] as name', 'string');
-	}
+  if (typeof name !== 'string') {
+    ThrowTypeError('args[0] as name', 'string');
+  }
 
-	const _Kit = (childName) => KitProxy(childName, Kit);
-	const Kit = new Proxy(_Kit, PROXY_HANDLER);
-	const dependencies = Object.create(null);
+  const _Kit = (childName) => KitProxy(childName, Kit);
+  const Kit = new Proxy(_Kit, PROXY_HANDLER);
+  const dependencies = Object.create(null);
 
-	dependencies.Kit = Kit;
+  dependencies.Kit = Kit;
 
-	_Kit.context = { name, parent, dependencies };
-	KitInternals.set(Kit, _Kit);
+  _Kit.context = { name, parent, dependencies };
+  KitInternals.set(Kit, _Kit);
 
-	return Kit;
+  return Kit;
 };
 
 export const isKit = (value) => KitInternals.has(value);

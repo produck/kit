@@ -1,4 +1,5 @@
 # @produck/kit
+
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/produck/kit/node.js.yml)](https://github.com/produck/kit/actions/workflows/node.js.yml)
 [![Coveralls](https://img.shields.io/coveralls/github/produck/kit)](https://coveralls.io/github/produck/kit)
 [![npm (scoped)](https://img.shields.io/npm/v/@produck/kit)](https://www.npmjs.com/package/@produck/kit)
@@ -9,7 +10,8 @@
 A dependency injection module based on prototype-chain delegation. Each Kit represents a scope. A child Kit can read dependencies registered on any ancestor Kit.
 
 ## Installation
-```
+
+```sh
 $ npm install @produck/kit
 ```
 
@@ -19,19 +21,19 @@ $ npm install @produck/kit
 import * as Kit from '@produck/kit';
 
 function BarProvider(kit) {
-	console.log(kit.version); // => @produck/kit version (inherited from global)
-	console.log(kit.foo);     // => 'bar' (inherited from base)
-	console.log(kit.baz);     // => 'qux' (own)
+  console.log(kit.version); // => @produck/kit version (inherited from global)
+  console.log(kit.foo); // => 'bar' (inherited from base)
+  console.log(kit.baz); // => 'qux' (own)
 }
 
 function FooProvider(kit) {
-	console.log(kit.foo); // => 'bar'
+  console.log(kit.foo); // => 'bar'
 
-	const child = kit('Child');  // create a child Kit
+  const child = kit('Child'); // create a child Kit
 
-	child.baz = 'qux';           // register dependency on child
+  child.baz = 'qux'; // register dependency on child
 
-	BarProvider(child);
+  BarProvider(child);
 }
 
 const base = Kit.global('Base');
@@ -42,7 +44,8 @@ FooProvider(base);
 ```
 
 The delegation chain for the example above:
-```
+
+```text
 [Child] --|> [Base] --|> [Kit::Global]
 ```
 
@@ -85,16 +88,16 @@ Creates a `KitInjector` that validates `required` dependencies exist on `kit` at
 import * as Kit from '@produck/kit';
 
 async function createOrder(kit, payload) {
-	const order = await kit.db.insert(payload);
+  const order = await kit.db.insert(payload);
 
-	kit.logger.info(`Order ${order.id} created`);
+  kit.logger.info(`Order ${order.id} created`);
 
-	return order;
+  return order;
 }
 
 const kit = Kit.global('OrderScope');
 
-kit.db     = myDatabase;
+kit.db = myDatabase;
 kit.logger = myLogger;
 
 // Validates that 'db' and 'logger' exist on kit immediately
@@ -103,7 +106,7 @@ const injector = Kit.Injector(kit, ['db', 'logger']);
 // Pre-inject kit as first argument; call-site args follow
 const handler = injector.bind(createOrder);
 
-app.post('/orders', (req, res) => handler(req.body).then(o => res.json(o)));
+app.post('/orders', (req, res) => handler(req.body).then((o) => res.json(o)));
 ```
 
 #### `injector.bind(fn, thisArg?)`
@@ -111,4 +114,5 @@ app.post('/orders', (req, res) => handler(req.body).then(o => res.json(o)));
 Returns a new function with `kit` pre-injected as the first argument. Additional call-site arguments are appended after it.
 
 ## License
+
 [MIT](https://github.com/produck/kit/blob/main/LICENSE)

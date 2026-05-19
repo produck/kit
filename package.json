@@ -1,26 +1,36 @@
 {
-	"name": "@produck/kit-workspace",
-	"private": true,
-	"scripts": {
-		"deps:install": "npm -v && npm install",
-		"deps:ci-install": "npm install --include=optional",
-		"lint": "eslint --fix",
-		"test": "npm run --workspaces build:version --if-present && npm test --workspaces --if-present",
-		"test:only": "npm run --workspaces test:only --if-present",
-		"coverage": "c8 npm run test",
-		"publish": "npm run lint && npm run test && lerna publish --no-private"
-	},
-	"devDependencies": {
-		"@eslint/js": "^10.0.1",
-		"@produck/eslint-rules": "^0.2.7",
-		"c8": "^11.0.0",
-		"eslint": "^10.3.0",
-		"globals": "^17.6.0",
-		"lerna": "^9.0.7",
-		"typescript-eslint": "^8.59.2"
-	},
-	"workspaces": [
-		"packages/kit",
-		"packages/diagram"
-	]
+  "name": "@produck/kit-workspace",
+  "private": true,
+  "scripts": {
+    "test": "npm run --workspaces build:version --if-present && npm test --workspaces --if-present",
+    "publish": "npm run produck:lint && npm run test && lerna publish --no-private",
+    "produck:format": "prettier --write . --ignore-path .prettierignore --ignore-path .gitignore",
+    "produck:lint": "eslint --fix . --max-warnings=0",
+    "produck:install": "npm -v && npm install",
+    "produck:baseline": "npm exec --package=@produck/agent-toolkit@latest -- agent-toolkit enforce-node-baseline --cwd . && npm run produck:install",
+    "produck:commit:check": "npm run produck:format && npm run produck:lint",
+    "prepare": "husky",
+    "produck:coverage": "c8 --config .c8rc.json npm run test --workspaces --if-present",
+    "produck:publish:check": "npm run produck:install && npm run produck:coverage && npm run produck:commit:check",
+    "produck:publish": "npm run produck:publish:check && npm run publish --"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@produck/eslint-rules": "0.4.0",
+    "c8": "11.0.0",
+    "eslint": "10.4.0",
+    "globals": "17.6.0",
+    "lerna": "9.0.7",
+    "typescript-eslint": "8.59.4",
+    "prettier": "3.8.3",
+    "@eslint/json": "1.2.0",
+    "@eslint/markdown": "8.0.1",
+    "@eslint/config-helpers": "0.6.0",
+    "husky": "9.1.7",
+    "@produck/agent-toolkit": "0.9.2"
+  },
+  "workspaces": [
+    "packages/kit",
+    "packages/diagram"
+  ]
 }

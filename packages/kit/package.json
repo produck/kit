@@ -1,49 +1,53 @@
 {
-	"name": "@produck/kit",
-	"version": "0.1.10",
-	"description": "A useful dependency injection module.",
-	"keywords": [
-		"duck",
-		"injection",
-		"kit",
-		"DI",
-		"IoC"
-	],
-	"author": "ChaosLee <chaos2lee@qq.com>",
-	"homepage": "https://github.com/produck/kit/tree/main/packages/kit#readme",
-	"license": "MIT",
-	"files": [
-		"index.mjs",
-		"version.gen.mjs",
-		"index.d.ts"
-	],
-	"types": "index.d.ts",
-	"type": "module",
-	"exports": {
-		".": {
-			"types": "./index.d.ts",
-			"import": "./index.mjs"
-		}
-	},
-	"publishConfig": {
-		"access": "public"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/produck/kit.git"
-	},
-	"scripts": {
-		"build": "node script/version.mjs",
-		"test": "node test/index.mjs",
-		"test:only": "node --test-only test/index.mjs",
-		"prepublishOnly": " npm run build"
-	},
-	"bugs": {
-		"url": "https://github.com/produck/kit/issues"
-	},
-	"dependencies": {
-		"@produck/kit-diagram": "^0.1.0",
-		"@produck/ow": "^0.2.3",
-		"@produck/type-error": "^0.1.5"
-	}
+  "name": "@produck/kit",
+  "version": "0.1.10",
+  "description": "A useful dependency injection module.",
+  "keywords": [
+    "duck",
+    "injection",
+    "kit",
+    "DI",
+    "IoC"
+  ],
+  "author": "ChaosLee <chaos2lee@qq.com>",
+  "homepage": "https://github.com/produck/kit/tree/main/packages/kit#readme",
+  "license": "MIT",
+  "files": [
+    "index.mjs",
+    "version.gen.mjs",
+    "index.d.ts"
+  ],
+  "types": "index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.mjs"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/produck/kit.git"
+  },
+  "scripts": {
+    "build": "node script/version.mjs",
+    "test": "node test/index.mjs",
+    "test:only": "node --test-only test/index.mjs",
+    "prepublishOnly": " npm run build",
+    "produck:coverage": "c8 --reporter=lcov --reporter=html --reporter=text-summary npm test"
+  },
+  "bugs": {
+    "url": "https://github.com/produck/kit/issues"
+  },
+  "dependencies": {
+    "@produck/kit-diagram": "^0.1.0",
+    "@produck/ow": "^0.2.3",
+    "@produck/type-error": "^0.1.5"
+  },
+  "devDependencies": {
+    "c8": "11.0.0"
+  }
 }

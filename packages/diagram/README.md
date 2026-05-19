@@ -17,11 +17,11 @@ protocol exposed by `Kit`. Nothing else needs to be wired up.
 ```js
 import * as Kit from '@produck/kit';
 import {
-	empty,
-	chainToRoot,
-	chainToSite,
-	vertical,
-	overview,
+  empty,
+  chainToRoot,
+  chainToSite,
+  vertical,
+  overview,
 } from '@produck/kit-diagram';
 
 const payment = Kit.global('PaymentKit');

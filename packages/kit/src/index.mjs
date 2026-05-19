@@ -7,14 +7,8 @@ const global = KitProxy('Kit::Global', null);
 
 global.version = version;
 
-export {
-	global,
-	global as default,
-	Getter,
-	isKit,
-	setDiagram,
-};
+export { global, global as default, Getter, isKit, setDiagram };
 
 export function Injector(kit = global, required = []) {
-	return new KitInjector(kit, required);
+  return new KitInjector(kit, required);
 }

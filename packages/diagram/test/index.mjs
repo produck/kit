@@ -1,0 +1,1 @@
+import './diagram.spec.mjs';
