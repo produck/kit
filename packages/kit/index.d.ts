@@ -22,7 +22,7 @@ export interface GlobalKit extends KitProvider {
 
 export interface KitInjector {
   bind<T extends (...args: unknown[]) => unknown>(
-    fn: T,
+    recipe: T,
     thisArg?: unknown,
   ): (...args: Parameters<T>) => ReturnType<T>;
 }

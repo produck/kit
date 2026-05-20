@@ -5,7 +5,7 @@ export function Getter(property) {
 
   return Object.freeze({
     use(kit) {
-      return kit[this.#property];
+      return kit[property];
     },
     touch(kit) {
       try {

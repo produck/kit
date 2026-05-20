@@ -57,12 +57,12 @@ describe('Injector::', function () {
   });
 
   describe('bind()', function () {
-    it('should throw if fn is not a function.', function () {
+    it('should throw if recipe is not a function.', function () {
       const injector = Kit.Injector(Kit.global);
 
       assert.throws(() => injector.bind('not a function'), {
         name: 'TypeError',
-        message: 'Invalid "args[0] as fn", one "function" expected.',
+        message: 'Invalid "args[0] as recipe", one "function" expected.',
       });
     });
 
@@ -89,17 +89,32 @@ describe('Injector::', function () {
       }, ctx)();
     });
 
-    it('should pass extra call-site arguments after the kit.', function () {
+    it('should pass extra call-site arguments as an array.', function () {
       const kit = Kit.global('BindArgsTest');
       const injector = Kit.Injector(kit);
-      let args;
+      let receivedKit, receivedArgs;
 
-      const bound = injector.bind((...a) => {
-        args = a;
+      const bound = injector.bind((k, callArgs) => {
+        receivedKit = k;
+        receivedArgs = callArgs;
       });
 
       bound('a', 'b');
-      assert.deepEqual(args, [kit, 'a', 'b']);
+      assert.strictEqual(receivedKit, kit);
+      assert.deepEqual(receivedArgs, ['a', 'b']);
+    });
+
+    it('should be used like', () => {
+      const mock = Kit.global('for injector sample');
+      const injector = Kit.Injector(mock);
+
+      mock.a = 10;
+
+      const bound = injector.bind(function fetchMockUser(kit, [x, y]) {
+        return kit.a * x + y;
+      });
+
+      assert.equal(bound(7, 9), 79);
     });
   });
 });

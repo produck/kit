@@ -22,11 +22,11 @@ export class KitInjector {
     this[I_KIT] = kit;
   }
 
-  bind(fn, thisArg = undefined) {
-    if (typeof fn !== 'function') {
-      ThrowTypeError('args[0] as fn', 'function');
+  bind(recipe, thisArg = undefined) {
+    if (typeof recipe !== 'function') {
+      ThrowTypeError('args[0] as recipe', 'function');
     }
 
-    return fn.bind(thisArg, this[I_KIT]);
+    return (...args) => recipe.call(thisArg, this[I_KIT], args);
   }
 }
