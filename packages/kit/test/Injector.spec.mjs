@@ -79,16 +79,6 @@ describe('Injector::', function () {
       assert.strictEqual(received, kit);
     });
 
-    it('should bind thisArg correctly.', function () {
-      const kit = Kit.global('BindThisTest');
-      const injector = Kit.Injector(kit);
-      const ctx = { x: 42 };
-
-      injector.bind(function () {
-        assert.strictEqual(this, ctx);
-      }, ctx)();
-    });
-
     it('should pass extra call-site arguments as an array.', function () {
       const kit = Kit.global('BindArgsTest');
       const injector = Kit.Injector(kit);
@@ -106,11 +96,10 @@ describe('Injector::', function () {
 
     it('should be used like', () => {
       const mock = Kit.global('for injector sample');
-      const injector = Kit.Injector(mock);
 
       mock.a = 10;
 
-      const bound = injector.bind(function fetchMockUser(kit, [x, y]) {
+      const bound = Kit.Injector(mock).bind((kit, [x, y]) => {
         return kit.a * x + y;
       });
 

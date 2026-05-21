@@ -13,8 +13,7 @@
   "homepage": "https://github.com/produck/kit/tree/main/packages/kit#readme",
   "license": "MIT",
   "files": [
-    "index.mjs",
-    "version.gen.mjs",
+    "src",
     "index.d.ts"
   ],
   "types": "index.d.ts",
@@ -22,7 +21,7 @@
   "exports": {
     ".": {
       "types": "./index.d.ts",
-      "import": "./index.mjs"
+      "import": "./src/index.mjs"
     }
   },
   "publishConfig": {

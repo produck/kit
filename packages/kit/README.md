@@ -109,9 +109,9 @@ const handler = injector.bind(createOrder);
 app.post('/orders', (req, res) => handler(req.body).then((o) => res.json(o)));
 ```
 
-#### `injector.bind(fn, thisArg?)`
+#### `injector.bind(fn)`
 
-Returns a new function with `kit` pre-injected as the first argument. Additional call-site arguments are appended after it.
+Returns a new function with `kit` pre-injected as the first argument. Additional call-site arguments are passed as an array (second argument of the recipe).
 
 ## License
 
