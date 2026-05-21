@@ -20,11 +20,23 @@ export interface GlobalKit extends KitProvider {
   version: string;
 }
 
+type Recipe<
+  A extends readonly unknown[] = readonly unknown[],
+  R = unknown,
+  TThis = unknown,
+> = (this: TThis, kit: KitProvider, args: A) => R;
+
+type RecipeArgs<R extends Recipe> =
+  R extends Recipe<infer A, unknown, unknown> ? A : never;
+
+type RecipeReturn<R extends Recipe> =
+  R extends Recipe<readonly unknown[], infer A, unknown> ? A : never;
+
 export interface KitInjector {
-  bind<T extends (...args: unknown[]) => unknown>(
-    recipe: T,
-    thisArg?: unknown,
-  ): (...args: Parameters<T>) => ReturnType<T>;
+  bind<R extends Recipe>(
+    recipe: R,
+    thisArg?: ThisParameterType<R>,
+  ): (...args: RecipeArgs<R>) => RecipeReturn<R>;
 }
 
 export type KitDiagramFn = (kit: unknown) => string;

@@ -14,7 +14,7 @@ describe('Kit::', function () {
   it('should throw if bad name.', function () {
     assert.throws(() => Kit.global(1), {
       name: 'TypeError',
-      message: 'Invalid "name", one "string" expected.\n',
+      message: 'Invalid "args[0] as name", one "string" expected.',
     });
   });
 
@@ -32,7 +32,7 @@ describe('Kit::', function () {
 
     assert.throws(() => (kit.bar = 'baz'), {
       name: 'Error',
-      message: 'There has been a dependence named "bar".\n',
+      message: 'Dependence "bar" exists.\n',
     });
   });
 
