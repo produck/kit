@@ -54,3 +54,12 @@ export function Injector(
   kit?: KitProvider,
   required?: Array<string | symbol | number>,
 ): KitInjector;
+
+export interface KitGetter<T = unknown> {
+  use(kit: KitProvider): T;
+  touch(kit: KitProvider): T | undefined;
+}
+
+export function Getter<T = unknown>(
+  property: string | symbol | number,
+): KitGetter<T>;

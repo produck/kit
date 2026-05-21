@@ -78,6 +78,34 @@ Kit.setDiagram(chainToRoot);
 
 Returns `true` if `value` is a Kit proxy instance.
 
+### `Getter(property)`
+
+Creates a typed accessor for a kit property. `property` must be `string | number | symbol`.
+
+```js
+import { Getter, global } from '@produck/kit';
+
+const kit = global('Scope');
+kit.foo = 42;
+
+const getFoo = Getter('foo');
+
+getFoo.use(kit); // => 42
+getFoo.touch(kit); // => 42
+
+// Missing property:
+getFoo.use(kit); // throws ReferenceError
+Getter('missing').touch(kit); // => undefined
+```
+
+#### `getter.use(kit)`
+
+Returns `kit[property]`. Throws if the property is not found.
+
+#### `getter.touch(kit)`
+
+Returns `kit[property]` if available, or `undefined` if the property is missing.
+
 ### `Injector(kit = global, required = [])`
 
 Creates a `KitInjector` that validates `required` dependencies exist on `kit` at construction time.
