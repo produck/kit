@@ -39,8 +39,5 @@
   },
   "bugs": {
     "url": "https://github.com/produck/kit/issues"
-  },
-  "devDependencies": {
-    "c8": "11.0.0"
   }
 }

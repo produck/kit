@@ -2,8 +2,7 @@ import * as Ow from '@produck/ow';
 import { ThrowTypeError } from '@produck/type-error';
 import * as KitDiagram from '@produck/kit-diagram';
 
-const KitInternals = new WeakMap();
-const SYM_KIT = Symbol.for('@produck/kit/internals');
+export const internals = new WeakMap();
 
 let MakeDiagram = KitDiagram.empty;
 
@@ -21,12 +20,6 @@ const throwError = (currentKit, message, Constructor = Error) => {
 
 const PROXY_HANDLER = {
   get: (_Kit, property, Kit) => {
-    if (property === SYM_KIT) {
-      const { name, parent } = _Kit.context;
-
-      return { name, parent };
-    }
-
     const { dependencies, parent } = _Kit.context;
 
     if (property in dependencies) {
@@ -68,9 +61,9 @@ export const KitProxy = (name = '<Anonymous>', parent) => {
   dependencies.Kit = Kit;
 
   _Kit.context = { name, parent, dependencies };
-  KitInternals.set(Kit, _Kit);
+  internals.set(Kit, _Kit);
 
   return Kit;
 };
 
-export const isKit = (value) => KitInternals.has(value);
+export const isKit = (value) => internals.has(value);

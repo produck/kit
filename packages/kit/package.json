@@ -45,8 +45,5 @@
     "@produck/kit-diagram": "^0.1.0",
     "@produck/ow": "^0.2.5",
     "@produck/type-error": "^0.1.7"
-  },
-  "devDependencies": {
-    "c8": "11.0.0"
   }
 }
