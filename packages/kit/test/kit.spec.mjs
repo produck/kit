@@ -1,6 +1,5 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import * as KitDiagram from '@produck/kit-diagram';
 
 import * as Kit from '../src/index.mjs';
 
@@ -44,23 +43,37 @@ describe('Kit::', function () {
   });
 
   it('should throw if setDiagram receives non-function.', function () {
-    assert.throws(() => Kit.setDiagram(42), {
+    assert.throws(() => Kit.setDiagram(Kit.global, 42), {
       name: 'TypeError',
-      message: 'Invalid "diagram", one function expected.',
+      message: 'Invalid "args[1] as diagram", one "function | null" expected.',
     });
   });
 
-  it('should support global setDiagram.', function () {
-    Kit.setDiagram(KitDiagram.chainToRoot);
+  it('should support per-kit setDiagram.', function () {
+    const kit = Kit.global('scope');
 
-    assert.throws(() => Kit.global('scope').foo, {
+    function chainToRoot(k) {
+      const names = [];
+      let current = k;
+
+      while (current != null) {
+        names.push(Kit.getName(current));
+        current = Kit.getParent(current);
+      }
+
+      return `[${names.join('] --|> [')}]`;
+    }
+
+    Kit.setDiagram(kit, chainToRoot);
+
+    assert.throws(() => kit.foo, {
       name: 'ReferenceError',
       message: 'Dependence "foo" is undefined.\n[scope] --|> [Kit::Global]',
     });
 
-    Kit.setDiagram();
+    Kit.setDiagram(kit);
 
-    assert.throws(() => Kit.global('scope2').foo, {
+    assert.throws(() => kit.foo, {
       name: 'ReferenceError',
       message: 'Dependence "foo" is undefined.\n',
     });
