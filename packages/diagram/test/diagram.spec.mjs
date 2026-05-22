@@ -3,21 +3,17 @@ import { describe, it } from 'node:test';
 import * as Kit from '@produck/kit';
 
 import {
-  empty,
   chainToRoot,
   chainToSite,
   vertical,
   overview,
+  cascade,
 } from '../index.mjs';
 
 describe('@produck/kit-diagram', () => {
   const root = Kit.global;
   const foo = root('foo');
   const bar = foo('bar');
-
-  it('should make empty diagram', () => {
-    assert.equal(empty(bar), '');
-  });
 
   it('should make chain-to-root diagram', () => {
     assert.equal(chainToRoot(bar), '[bar] --|> [foo] --|> [Kit::Global]');
@@ -46,5 +42,52 @@ describe('@produck/kit-diagram', () => {
     assert.equal(chainToSite({}), '[]');
     assert.equal(vertical({}), '');
     assert.equal(overview({}), '[Site::undefined]\n[]\n[Root::undefined]');
+  });
+
+  describe('cascade()', () => {
+    it('should render a 3-level cascade from global to leaf.', () => {
+      assert.equal(
+        cascade(bar),
+        [
+          '┌─────────────┐',
+          '│ Kit::Global │',
+          '└──────┬──────┘',
+          '       │',
+          '┌──────┴──────┐',
+          '│     foo     │',
+          '└──────┬──────┘',
+          '       │',
+          '┌──────┴──────┐',
+          '│     bar     │',
+          '└─────────────┘',
+        ].join('\n'),
+      );
+    });
+
+    it('should render a 1-level cascade for global itself.', () => {
+      assert.equal(
+        cascade(Kit.global),
+        ['┌─────────────┐', '│ Kit::Global │', '└─────────────┘'].join('\n'),
+      );
+    });
+
+    it('should render a 2-level cascade.', () => {
+      assert.equal(
+        cascade(foo),
+        [
+          '┌─────────────┐',
+          '│ Kit::Global │',
+          '└──────┬──────┘',
+          '       │',
+          '┌──────┴──────┐',
+          '│     foo     │',
+          '└─────────────┘',
+        ].join('\n'),
+      );
+    });
+
+    it('should return empty string for invalid kit.', () => {
+      assert.equal(cascade({}), '');
+    });
   });
 });
