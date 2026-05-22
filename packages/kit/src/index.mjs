@@ -1,5 +1,5 @@
 import { ThrowTypeError } from '@produck/type-error';
-import { KitProxy, isKit, setDiagram, internals } from './KitProxy.mjs';
+import { KitProxy, isKit, internals } from './KitProxy.mjs';
 import { KitInjector } from './Injector.mjs';
 import { Getter } from './Getter.mjs';
 import version from './version.gen.mjs';
@@ -8,37 +8,34 @@ const global = KitProxy('Kit::Global', null);
 
 global.version = version;
 
-export { global, global as default, Getter, isKit, setDiagram };
+export { global, global as default, Getter, isKit };
 
 export function Injector(kit = global, required = []) {
   return new KitInjector(kit, required);
 }
 
-function assertKitAtArgsFirst(kit) {
-  if (!isKit(kit)) {
-    ThrowTypeError('args[0] as kit', 'Kit');
+function useKitContextTo(fn) {
+  return (kit, ...rest) => {
+    if (!isKit(kit)) {
+      ThrowTypeError('args[0] as kit', 'Kit');
+    }
+
+    return fn(internals.get(kit).context, ...rest);
+  };
+}
+
+export const getParent = useKitContextTo(({ parent }) => parent);
+export const getName = useKitContextTo(({ name }) => name);
+
+export const getDependencePropertyList = useKitContextTo(({ dependencies }) => [
+  ...Object.getOwnPropertyNames(dependencies),
+  ...Object.getOwnPropertySymbols(dependencies),
+]);
+
+export const setDiagram = useKitContextTo((context, diagram = null) => {
+  if (typeof diagram !== 'function' && diagram !== null) {
+    ThrowTypeError('args[1] as diagram', 'function | null');
   }
-}
 
-export function getParent(kit) {
-  assertKitAtArgsFirst(kit);
-
-  return internals.get(kit).parent;
-}
-
-export function getName(kit) {
-  assertKitAtArgsFirst(kit);
-
-  return internals.get(kit).name;
-}
-
-export function getDependencePropertyList(kit) {
-  assertKitAtArgsFirst(kit);
-
-  const { dependencies } = internals.get(kit);
-
-  return [
-    ...Object.getOwnPropertyNames(dependencies),
-    ...Object.getOwnPropertySymbols(dependencies),
-  ];
-}
+  context.diagram = diagram;
+});

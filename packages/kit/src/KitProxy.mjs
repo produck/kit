@@ -1,21 +1,13 @@
 import * as Ow from '@produck/ow';
 import { ThrowTypeError } from '@produck/type-error';
-import * as KitDiagram from '@produck/kit-diagram';
 
 export const internals = new WeakMap();
 
-let MakeDiagram = KitDiagram.empty;
+const throws = (kit, message, Constructor = Error) => {
+  const { diagram } = internals.get(kit).context;
+  const messages = [message, diagram === null ? '' : diagram(kit)].join('\n');
 
-export const setDiagram = (diagram = KitDiagram.empty) => {
-  if (typeof diagram !== 'function') {
-    Ow.throw(new TypeError('Invalid "diagram", one function expected.'));
-  }
-
-  MakeDiagram = diagram;
-};
-
-const throwError = (currentKit, message, Constructor = Error) => {
-  Ow.throw(new Constructor(`${message}\n${MakeDiagram(currentKit)}`));
+  Ow.throw(new Constructor(messages));
 };
 
 const PROXY_HANDLER = {
@@ -33,14 +25,14 @@ const PROXY_HANDLER = {
 
       return parent[property];
     } catch {
-      throwError(Kit, `Dependence "${property}" is undefined.`, ReferenceError);
+      throws(Kit, `Dependence "${property}" is undefined.`, ReferenceError);
     }
   },
   set: (_Kit, property, dependence, Kit) => {
     const { dependencies } = _Kit.context;
 
     if (property in dependencies) {
-      throwError(Kit, `Dependence "${property}" exists.`);
+      throws(Kit, `Dependence "${property}" exists.`);
     }
 
     dependencies[property] = dependence;
@@ -60,7 +52,7 @@ export const KitProxy = (name = '<Anonymous>', parent) => {
 
   dependencies.Kit = Kit;
 
-  _Kit.context = { name, parent, dependencies };
+  _Kit.context = { name, parent, dependencies, diagram: null };
   internals.set(Kit, _Kit);
 
   return Kit;
