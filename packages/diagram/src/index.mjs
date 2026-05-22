@@ -1,18 +1,16 @@
-const SYM_KIT = Symbol.for('@produck/kit/internals');
+import { getName, getParent, isKit } from '@produck/kit';
 
 const chainOf = (kit) => {
   const chain = [];
   let current = kit;
 
   while (current != null) {
-    const context = current[SYM_KIT];
-
-    if (context === undefined) {
+    if (!isKit(current)) {
       break;
     }
 
-    chain.push(context.name);
-    current = context.parent;
+    chain.push(getName(current));
+    current = getParent(current);
   }
 
   return chain;
