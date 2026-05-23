@@ -3,7 +3,6 @@
   "version": "0.1.10",
   "description": "A useful dependency injection module.",
   "keywords": [
-    "duck",
     "injection",
     "kit",
     "DI",
