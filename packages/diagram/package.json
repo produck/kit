@@ -1,6 +1,6 @@
 {
   "name": "@produck/kit-diagram",
-  "version": "0.2.0",
+  "version": "0.3.1",
   "description": "ASCII relation diagrams for @produck/kit chain debugging.",
   "keywords": [
     "duck",
@@ -41,6 +41,6 @@
     "url": "https://github.com/produck/kit/issues"
   },
   "devDependencies": {
-    "@produck/kit": "^0.2.0"
+    "@produck/kit": "^0.3.0"
   }
 }
