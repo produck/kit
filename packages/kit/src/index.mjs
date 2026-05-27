@@ -2,11 +2,11 @@ import { ThrowTypeError } from '@produck/type-error';
 import { KitProxy, isKit, internals } from './KitProxy.mjs';
 import { KitInjector, defineRecipe } from './Injector.mjs';
 import { Getter } from './Getter.mjs';
-import version from './version.gen.mjs';
+import * as META from './meta.gen.mjs';
 
 const global = KitProxy('Kit::Global', null);
 
-global.version = version;
+global.version = META.VERSION;
 
 export function Injector(kit = global, required = []) {
   return new KitInjector(kit, required);

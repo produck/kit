@@ -31,8 +31,8 @@
     "url": "git+https://github.com/produck/kit.git"
   },
   "scripts": {
-    "build": "node script/version.mjs",
-    "test": "node test/index.mjs",
+    "build": "node script/meta.mjs",
+    "test": "npm run build && node test/index.mjs",
     "test:only": "node --test-only test/index.mjs",
     "prepublishOnly": " npm run build",
     "produck:coverage": "c8 --reporter=lcov --reporter=html --reporter=text-summary npm test"
@@ -43,5 +43,8 @@
   "dependencies": {
     "@produck/ow": "^0.2.5",
     "@produck/type-error": "^0.1.7"
+  },
+  "devDependencies": {
+    "@produck/package-meta-extractor": "^1.0.1"
   }
 }
