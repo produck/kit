@@ -1,8 +1,0 @@
-{
-  "reporter": ["text", "html", "json-summary", "lcov"],
-  "src": ["src"],
-  "exclude": ["**/test/**", "**/dist/**", "**/script/**", "**/node_modules/**"],
-  "extension": [".mjs"],
-  "all": true,
-  "check-coverage": false
-}
