@@ -4,10 +4,14 @@ import { ThrowTypeError } from '@produck/type-error';
 export const internals = new WeakMap();
 
 const throws = (kit, message, Constructor = Error) => {
+  const messages = [message];
   const { diagram } = internals.get(kit).context;
-  const messages = [message, diagram === null ? '' : diagram(kit)].join('\n');
 
-  Ow.throw(new Constructor(messages));
+  if (diagram !== null) {
+    messages.push(diagram(kit));
+  }
+
+  Ow.throw(new Constructor(messages.join('\n')));
 };
 
 const PROXY_HANDLER = {
