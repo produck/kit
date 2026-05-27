@@ -27,7 +27,9 @@ export class KitInjector {
       ThrowTypeError('args[0] as recipe', 'function');
     }
 
-    return (...args) => recipe(this[I_KIT], args);
+    const NAME = `KitInject_${recipe.name}`;
+
+    return { [NAME]: (...args) => recipe(this[I_KIT], args) }[NAME];
   }
 }
 

@@ -105,5 +105,13 @@ describe('Injector::', function () {
 
       assert.equal(bound(7, 9), 79);
     });
+
+    it('should name the bound function as KitInject_<recipeName>', function () {
+      const kit = Kit.global('BindNameTest');
+      const injector = Kit.Injector(kit);
+      const bound = injector.bind(function myRecipe() {});
+
+      assert.strictEqual(bound.name, 'KitInject_myRecipe');
+    });
   });
 });

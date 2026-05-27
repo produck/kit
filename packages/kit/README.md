@@ -217,7 +217,7 @@ const handler = injector.bind(createOrder);
 app.post('/orders', (req, res) => handler(req.body).then((o) => res.json(o)));
 ```
 
-### `defineRecipe(fn)`
+### `defineRecipe(recipe)`
 
 Helper for downstream (non-TS) consumers to declare recipe functions with
 typed call-site argument tuples. Recipes receive the pre-injected `kit` as the
@@ -243,7 +243,7 @@ const handler = Kit.Injector(kit, ['db']).bind(recipe);
 handler({ name: 'alice' }).then((u) => console.log(u));
 ```
 
-#### `injector.bind(fn)`
+#### `injector.bind(recipe)`
 
 Returns a new function with `kit` pre-injected as the first argument.
 Additional call-site arguments are passed as an array
