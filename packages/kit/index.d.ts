@@ -60,6 +60,25 @@ export interface KitInjector {
   ): (...args: RecipeArgs<R>) => RecipeReturn<R>;
 }
 
+/**
+ * Helper for downstream (non-TS) consumers to provide typed recipe functions.
+ * Returns the same function but preserves the call-site argument tuple and
+ * return types for TypeScript consumers that import the package's d.ts.
+ *
+ * Example:
+ * ```ts
+ * const recipe = defineRecipe((kit, args: [id: string]) => {
+ *   const [id] = args;
+ *   return { id };
+ * });
+ * // recipe has type (kit: KitProvider, args: [id: string]) => { id: string }
+ * ```
+ */
+export function defineRecipe<
+  A extends readonly unknown[] = readonly unknown[],
+  R = unknown,
+>(recipe: (kit: KitProvider, args: A) => R): (kit: KitProvider, args: A) => R;
+
 export type KitDiagramFn = (kit: unknown) => string;
 
 /**

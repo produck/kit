@@ -30,3 +30,11 @@ export class KitInjector {
     return (...args) => recipe(this[I_KIT], args);
   }
 }
+
+export function defineRecipe(recipe) {
+  if (typeof recipe !== 'function') {
+    ThrowTypeError('args[0] as recipe', 'function');
+  }
+
+  return recipe;
+}

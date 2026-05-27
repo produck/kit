@@ -1,14 +1,12 @@
 import { ThrowTypeError } from '@produck/type-error';
 import { KitProxy, isKit, internals } from './KitProxy.mjs';
-import { KitInjector } from './Injector.mjs';
+import { KitInjector, defineRecipe } from './Injector.mjs';
 import { Getter } from './Getter.mjs';
 import version from './version.gen.mjs';
 
 const global = KitProxy('Kit::Global', null);
 
 global.version = version;
-
-export { global, global as default, Getter, isKit };
 
 export function Injector(kit = global, required = []) {
   return new KitInjector(kit, required);
@@ -39,3 +37,5 @@ export const setDiagram = useKitContextTo((context, diagram = null) => {
 
   context.diagram = diagram;
 });
+
+export { global, global as default, Getter, isKit, defineRecipe };

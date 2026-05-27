@@ -217,6 +217,32 @@ const handler = injector.bind(createOrder);
 app.post('/orders', (req, res) => handler(req.body).then((o) => res.json(o)));
 ```
 
+### `defineRecipe(fn)`
+
+Helper for downstream (non-TS) consumers to declare recipe functions with
+typed call-site argument tuples. Recipes receive the pre-injected `kit` as the
+first argument and an `args` tuple (array-like) containing call-site values as
+the second argument.
+
+```js
+import * as Kit from '@produck/kit';
+
+// recipe receives kit and an args tuple
+function createUser(kit, [payload]) {
+  return kit.db.insert(payload);
+}
+
+const recipe = Kit.defineRecipe(createUser);
+
+const kit = Kit.global('App');
+kit.db = myDatabase;
+
+// injector.bind will pre-inject kit and pass call-site args as an array
+const handler = Kit.Injector(kit, ['db']).bind(recipe);
+
+handler({ name: 'alice' }).then((u) => console.log(u));
+```
+
 #### `injector.bind(fn)`
 
 Returns a new function with `kit` pre-injected as the first argument.
