@@ -28,6 +28,7 @@
     "husky": "9.1.7",
     "lerna": "9.0.7",
     "prettier": "3.8.3",
+    "@produck/package-meta-extractor": "1.0.2",
     "typescript-eslint": "8.59.4"
   },
   "workspaces": [

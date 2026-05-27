@@ -43,8 +43,5 @@
   "dependencies": {
     "@produck/ow": "^0.2.5",
     "@produck/type-error": "^0.1.7"
-  },
-  "devDependencies": {
-    "@produck/package-meta-extractor": "^1.0.1"
   }
 }
