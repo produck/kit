@@ -90,11 +90,153 @@ console.log(base.foo); // => 'defined on Base'       ← unchanged
 console.log(grandchild.foo); // => 'overridden on Child'   ← inherited from child
 ```
 
+#### Blocking access via intermediate shadowing
+
+An intermediate Kit can intentionally shadow a dependency to prevent
+downstream Kits from reaching an ancestor's version. This is useful for
+sandboxing, test mocking, or scoped overrides.
+
+```js
+import * as Kit from '@produck/kit';
+
+const root = Kit.global('Root');
+root.db = 'production-db';
+
+const sandbox = root('Sandbox');
+sandbox.db = 'sandbox-db'; // shadows root.db for all descendants
+
+const query = sandbox('Query');
+query.db; // => 'sandbox-db'  ← sees sandbox's version, never reaches root
+```
+
+The delegation chain:
+
+```text
+[Query] --|> [Sandbox] --|> [Root]
+```
+
+Here `Sandbox` intercepts `db` so that `Query` and any deeper descendant
+cannot accidentally (or intentionally) reach `Root`'s original `db`.
+The override is scoped — `Root` itself and other branches remain unaffected.
+
 The delegation chain:
 
 ```text
 [GrandChild] --|> [Child] --|> [Base] --|> [Kit::Global]
 ```
+
+## Design concepts
+
+### Limited mutability
+
+Kit is a **write-once, append-only** container. Dependencies can be registered
+once and never modified or removed:
+
+- A dependency **can be added** if the key does not exist.
+- **Overwriting** an existing dependency throws `Error`.
+- **Deleting** any property throws `Error`.
+
+```js
+const kit = Kit.global('Shop');
+
+kit.db = myDatabase; // ✅ first write succeeds
+kit.db = anotherDatabase; // ❌ Error: "Dependence 'db' exists."
+delete kit.db; // ❌ Error: "Delete operation is not allowed."
+```
+
+This guarantees stability: once a dependency is visible to child scopes, it
+will not be replaced or removed without creating a new scope.
+
+### No enumeration, no probing
+
+Kit is designed as a **black-box** container. Consumers must know the
+dependency name they need and access it directly via property read (`get`).
+Introspection and probing are explicitly prevented:
+
+| Operation                             | Behaviour                  |
+| ------------------------------------- | -------------------------- |
+| `'key' in kit`                        | ❌ throws `Error`          |
+| `Object.keys(kit)`                    | ❌ throws `Error`          |
+| `for...in`, spread, `Reflect.ownKeys` | ❌ throws `Error`          |
+| `kit.key` (property exists)           | ✅ returns the dependency  |
+| `kit.key` (property missing)          | ❌ throws `ReferenceError` |
+
+```js
+const kit = Kit.global('App');
+kit.config = { port: 3000 };
+
+'config' in kit; // ❌ Error: "\"in\" operator is not allowed on a Kit."
+Object.keys(kit); // ❌ Error: "Enumeration is not allowed on a Kit."
+kit.config; // ✅ { port: 3000 }
+```
+
+The rationale: a scope should only expose the dependencies that collaborating
+modules explicitly agree on. Querying "what is available" encourages
+implicit coupling and defeats the purpose of explicit DI.
+
+To list all registered keys for debugging, use the explicit API:
+
+```js
+Kit.getDependencePropertyList(kit);
+```
+
+### Trade-off: mental burden vs. flexibility
+
+These restrictions are a deliberate trade-off that favours **predictability**
+over **convenience**.
+
+**What you give up:**
+
+- No runtime inspection — you cannot write generic utilities that iterate
+  "all deps on a Kit". This makes debugging slightly less convenient and
+  rules out patterns like auto-wiring or convention-based DI.
+
+**What you gain:**
+
+- **Explicit contracts.** Every dependency access is a deliberate read at a
+  known key. There is no "magic" that resolves dependencies based on naming
+  conventions or type hints — what you see (`kit.foo`) is exactly what
+  happens.
+- **Stable scope graph.** Because deps cannot be deleted or overwritten, you
+  can reason about a Kit's state at any point in its lifetime: once a
+  dependency is set, it stays set. This eliminates an entire class of bugs
+  around mutable shared state.
+- **Clear failure boundary.** If a dependency is missing, you get an
+  immediate `ReferenceError` with a stack trace pointing to the exact access
+  site — no silent `undefined`, no late failure in a downstream consumer.
+- **Simplified child-scope reasoning.** A child Kit inherits from its parent,
+  but since neither can delete or overwrite inherited deps, there is no risk
+  of a sibling or unrelated scope corrupting the dependency graph. The
+  delegation chain is append-only from root to leaf.
+
+```js
+// Without restrictions — fragile, implicit.
+function startServer(kit) {
+  const config = kit.config || {}; // silent fallback, hides errors
+  const db = kit['db-' + config.env]; // computed key, hard to track
+  delete kit.cache; // mutates shared state
+}
+
+// With Kit restrictions — explicit, stable.
+function startServer(kit) {
+  const db = kit.db; // ✅ clear dependency, fails fast if missing
+  const logger = Getter('logger').touch(kit) ?? console; // ✅ explicit optional dep
+}
+```
+
+These restrictions make Kit a poor fit for scenarios that require dynamic
+discovery or convention-based wiring (e.g., automatic controller scanning).
+They excel when you want a **simple, predictable, and auditable** DI container
+where every dependency is explicitly declared and the scope graph is immutable
+once built.
+
+### Public introspection API
+
+For cases where enumeration is genuinely needed (tooling, serialisation,
+inspection), Kit provides an explicit opt-in API:
+
+- [`getDependencePropertyList(kit)`](#getdependencepropertylistkit-propertykey)
+  returns all own dependency keys.
 
 ## API
 
