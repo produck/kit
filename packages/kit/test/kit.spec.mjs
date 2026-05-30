@@ -20,7 +20,7 @@ describe('Kit::', function () {
   it('should throw if accessing bad dep.', function () {
     assert.throws(() => Kit.global().foo, {
       name: 'ReferenceError',
-      message: 'Dependence "foo" is undefined.\n',
+      message: 'Dependence "foo" is undefined.',
     });
   });
 
@@ -31,7 +31,7 @@ describe('Kit::', function () {
 
     assert.throws(() => (kit.bar = 'baz'), {
       name: 'Error',
-      message: 'Dependence "bar" exists.\n',
+      message: 'Dependence "bar" exists.',
     });
   });
 
@@ -75,7 +75,7 @@ describe('Kit::', function () {
 
     assert.throws(() => kit.foo, {
       name: 'ReferenceError',
-      message: 'Dependence "foo" is undefined.\n',
+      message: 'Dependence "foo" is undefined.',
     });
   });
 
@@ -162,6 +162,35 @@ describe('Kit::', function () {
       assert.throws(() => Kit.getDependencePropertyList({}), {
         name: 'TypeError',
         message: 'Invalid "args[0] as kit", one "Kit" expected.',
+      });
+    });
+  });
+
+  describe('Proxy restriction traps', function () {
+    it('should throw on deleteProperty.', function () {
+      const kit = Kit.global('del');
+      kit.foo = 'bar';
+
+      assert.throws(() => delete kit.foo, {
+        name: 'Error',
+        message: 'Delete operation is not allowed.',
+      });
+    });
+
+    it('should throw on has ("in" operator).', function () {
+      const kit = Kit.global('has');
+      kit.foo = 'bar';
+
+      assert.throws(() => 'foo' in kit, {
+        name: 'Error',
+        message: '"in" operator is not allowed on a Kit.',
+      });
+    });
+
+    it('should throw on ownKeys (Object.keys).', function () {
+      assert.throws(() => Object.keys(Kit.global('ownKeys')), {
+        name: 'Error',
+        message: 'Enumeration is not allowed on a Kit.',
       });
     });
   });

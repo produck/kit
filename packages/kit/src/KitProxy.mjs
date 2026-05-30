@@ -43,6 +43,9 @@ const PROXY_HANDLER = {
 
     return true;
   },
+  deleteProperty: () => Ow.Error.Common('Delete operation is not allowed.'),
+  has: () => Ow.Error.Common('"in" operator is not allowed on a Kit.'),
+  ownKeys: () => Ow.Error.Common('Enumeration is not allowed on a Kit.'),
 };
 
 export const KitProxy = (name = '<Anonymous>', parent) => {
