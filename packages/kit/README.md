@@ -391,6 +391,82 @@ Returns a new function with `kit` pre-injected as the first argument.
 Additional call-site arguments are passed as an array
 (second argument of the recipe).
 
+## Getter patterns
+
+### Naming conventions
+
+The `use`/`touch` names returned by `Getter` are generic. You give them
+business meaning when exporting, in one of two ways:
+
+**Consumer naming** — the consumer assigns meaning via a namespace import.
+Since `import * as Config` already conveys what `Config.use(kit)` does, no
+rename is needed at the supplier side.
+
+```js
+// supplier: destructure and export as-is
+export const { use, touch } = Getter('config');
+export const { use } = Getter('logger');
+
+// consumer: namespace carries the semantics
+import * as Config from './config.mjs';
+import * as Logger from './logger.mjs';
+
+Config.use(kit); // reads config
+Logger.use(kit); // reads logger
+```
+
+**Supplier naming** — the supplier renames `use`/`touch` to verb‑noun phrases
+at export time, making the intent self‑explanatory to consumers.
+
+```js
+// supplier: rename then export
+const { use: useConfig, touch: touchConfig } = Getter('config');
+const { use: useLogger } = Getter('logger');
+
+export { useConfig, touchConfig, useLogger };
+
+// consumer: import by the explicit name
+import { useConfig, touchConfig } from './config.mjs';
+import { useLogger } from './logger.mjs';
+
+useConfig(kit); // reads config
+useLogger(kit); // reads logger
+```
+
+Both patterns are equivalent. Pick one per project and stay consistent,
+especially when multiple `Getter`s are exported from the same module.
+
+### Symbol‑keyed dependencies (protected access)
+
+`Getter` can use a `Symbol` as the property key. Since the Symbol is scoped
+to the module that created it, consumers cannot reach the dependency via
+`kit[<symbol>]` (they do not hold the same Symbol reference). The only way
+to access the value is through the exported `use`/`touch` functions.
+
+This is useful for dependencies that should be unlisted and only accessible
+through a controlled accessor — a pattern akin to "protected" members.
+
+```js
+// --- @my-lib/internal.mjs ---
+const _pool = Symbol('pool');
+
+export const { use: usePool } = Getter(_pool);
+
+export function initPool(kit) {
+  kit[_pool] = new Pool();
+}
+
+// --- app.mjs ---
+import { initPool, usePool } from '@my-lib/internal.mjs';
+
+const kit = Kit.global('App');
+
+initPool(kit);
+usePool(kit); // ✅ Access via the exported getter
+
+kit[_pool]; // ❌ Cannot reach the same Symbol from outside the module
+```
+
 ## License
 
 [MIT](https://github.com/produck/kit/blob/main/LICENSE)
