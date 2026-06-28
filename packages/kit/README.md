@@ -64,7 +64,7 @@ JavaScript's native `[[Prototype]]`.
 ```js
 import * as Kit from '@produck/kit';
 
-// Create root scope, register a property.
+// Create root scope, register a dependency.
 const base = Kit.global('Base');
 base.foo = 'defined on Base';
 
@@ -79,7 +79,7 @@ grandchild.baz = 'defined on GrandChild';
 // Access on grandchild: walks up the chain.
 console.log(grandchild.foo); // => 'defined on Base'       ← inherited from base
 console.log(grandchild.bar); // => 'defined on Child'      ← inherited from child
-console.log(grandchild.baz); // => 'defined on GrandChild'  ← own property
+console.log(grandchild.baz); // => 'defined on GrandChild'  ← own dependency
 
 // Shadow: set on child without mutating base.
 child.foo = 'overridden on Child';
@@ -235,7 +235,7 @@ once built.
 For cases where enumeration is genuinely needed (tooling, serialisation,
 inspection), Kit provides an explicit opt-in API:
 
-- [`getDependencePropertyList(kit)`](#getdependencepropertylistkit-propertykey)
+- [`getDependencePropertyList(kit)`](#getdependencepropertylistkit-dependencename)
   returns all own dependency keys.
 
 ## API
@@ -281,15 +281,15 @@ Returns the debug name of the given Kit.
 
 Returns the parent Kit, or `null` if `kit` is the global root.
 
-### `getDependencePropertyList(kit): PropertyKey[]`
+### `getDependencePropertyList(kit): DependenceName[]`
 
-Returns an array of all registered property keys (own properties only,
+Returns an array of all registered dependence names (own properties only,
 including symbols) on the given Kit.
 
-### `Getter(property)`
+### `Getter(name)`
 
-Creates a typed accessor for a kit property. `property` must be
-a valid `PropertyKey` (`string | number | symbol`). Designed for downstream
+Creates a typed accessor for a kit dependence. `name` must be
+a valid dependence name (`string | symbol`). Designed for downstream
 libraries to destructure and re-export the individual `use`/`touch` functions.
 
 ```js
@@ -320,19 +320,18 @@ Getter('absent').touch(kit); // => undefined
 
 #### `getter.use(kit)`
 
-Returns `kit[property]`. Throws if the property is not found.
+Returns `kit[name]`. Throws if the dependence is not found.
 
 #### `getter.touch(kit)`
 
-Returns `kit[property]` if available, or `undefined` if the property is missing.
+Returns `kit[name]` if available, or `undefined` if the dependence is missing.
 
 ### `Injector(kit = global, required = [])`
 
 Creates a `KitInjector` that validates `required` dependencies exist on `kit`
 at construction time.
 
-`required` is an array of valid `PropertyKey` values
-(`string | number | symbol`).
+`required` is an array of valid dependence names (`string | symbol`).
 
 ```js
 import * as Kit from '@produck/kit';

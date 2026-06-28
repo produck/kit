@@ -110,31 +110,31 @@ export function setDiagram(kit: KitProvider, diagram?: KitDiagramFn): void;
  * on the given kit at construction time.
  *
  * @param kit - The Kit instance to inject. Defaults to `global`.
- * @param required - Array of property keys to validate.
+ * @param required - Array of dependence names to validate.
  * @returns A KitInjector instance.
  */
 export function Injector(
   kit?: KitProvider,
-  required?: PropertyKey[],
+  required?: DependenceName[],
 ): KitInjector;
 
 /**
- * A typed accessor for a Kit property.
+ * A typed accessor for a Kit dependence.
  *
- * @template T - The type of the property value.
+ * @template T - The type of the dependence value.
  */
 export interface KitGetter<T = unknown> {
   /**
-   * Read the property from the given Kit.
-   * Throws `ReferenceError` if the property is not found.
+   * Read the dependence from the given Kit.
+   * Throws `ReferenceError` if the dependence is not found.
    *
    * @param kit - The Kit instance to read from.
    */
   use(kit: KitProvider): T;
 
   /**
-   * Safely read the property from the given Kit.
-   * Returns `undefined` if the property is not found.
+   * Safely read the dependence from the given Kit.
+   * Returns `undefined` if the dependence is not found.
    *
    * @param kit - The Kit instance to read from.
    */
@@ -142,15 +142,29 @@ export interface KitGetter<T = unknown> {
 }
 
 /**
- * Create a typed accessor for a Kit property.
+ * A valid dependence name for Kit dependencies.
+ * Must be a JS property key: `string | symbol`.
+ */
+export type DependenceName = string | symbol;
+
+/**
+ * Create a typed accessor for a Kit dependence.
  * Designed for downstream libraries to destructure and re-export
  * the `use`/`touch` functions.
  *
- * @template T - The type of the property value.
- * @template P - The property key type (preserves `unique symbol` literals).
- * @param property - The property key to access.
- * @returns A KitGetter for the specified property.
+ * @template T - The type of the dependence value.
+ * @template P - The dependence name type (preserves `unique symbol` literals).
+ * @param name - The dependence name to access.
+ * @returns A KitGetter for the specified dependence.
  */
-export function Getter<T = unknown, P extends PropertyKey = PropertyKey>(
-  property: P,
+export function Getter<T = unknown, P extends DependenceName = DependenceName>(
+  name: P,
 ): KitGetter<T>;
+
+/**
+ * Check if a value is a valid dependence name (`string | symbol`).
+ *
+ * @param value - The value to check.
+ * @returns `true` if the value is a valid dependence name.
+ */
+export function isDependenceName(value: unknown): value is DependenceName;

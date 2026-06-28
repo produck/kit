@@ -26,7 +26,7 @@
   "license": "MIT",
   "name": "@produck/kit-diagram",
   "peerDependencies": {
-    "@produck/kit": "^0.3.0"
+    "@produck/kit": ">=0.3.0"
   },
   "publishConfig": {
     "access": "public"
