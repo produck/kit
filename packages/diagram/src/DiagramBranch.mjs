@@ -5,7 +5,9 @@ export default function DiagramBranch(kit) {
 
   return chain
     .map((name, i) => {
-      if (i === 0) return name;
+      if (i === 0) {
+        return name;
+      }
 
       const indent = 4 * (i - 1);
 

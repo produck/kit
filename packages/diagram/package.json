@@ -1,7 +1,21 @@
 {
-  "name": "@produck/kit-diagram",
-  "version": "0.3.2",
+  "author": "ChaosLee <chaos2lee@qq.com>",
+  "bugs": {
+    "url": "https://github.com/produck/kit/issues"
+  },
   "description": "ASCII relation diagrams for @produck/kit chain debugging.",
+  "exports": {
+    ".": {
+      "import": "./index.mjs",
+      "types": "./index.d.ts"
+    }
+  },
+  "files": [
+    "index.mjs",
+    "src",
+    "index.d.ts"
+  ],
+  "homepage": "https://github.com/produck/kit/tree/main/packages/diagram#readme",
   "keywords": [
     "duck",
     "kit",
@@ -9,21 +23,10 @@
     "ascii",
     "debug"
   ],
-  "author": "ChaosLee <chaos2lee@qq.com>",
-  "homepage": "https://github.com/produck/kit/tree/main/packages/diagram#readme",
   "license": "MIT",
-  "files": [
-    "index.mjs",
-    "src",
-    "index.d.ts"
-  ],
-  "types": "index.d.ts",
-  "type": "module",
-  "exports": {
-    ".": {
-      "types": "./index.d.ts",
-      "import": "./index.mjs"
-    }
+  "name": "@produck/kit-diagram",
+  "peerDependencies": {
+    "@produck/kit": "^0.3.0"
   },
   "publishConfig": {
     "access": "public"
@@ -33,14 +36,11 @@
     "url": "git+https://github.com/produck/kit.git"
   },
   "scripts": {
+    "produck:coverage": "c8 --reporter=lcov --reporter=html --reporter=text-summary npm test",
     "test": "node test/index.mjs",
-    "test:only": "node --test-only test/index.mjs",
-    "produck:coverage": "c8 --reporter=lcov --reporter=html --reporter=text-summary npm test"
+    "test:only": "node --test-only test/index.mjs"
   },
-  "bugs": {
-    "url": "https://github.com/produck/kit/issues"
-  },
-  "peerDependencies": {
-    "@produck/kit": "^0.3.0"
-  }
+  "type": "module",
+  "types": "index.d.ts",
+  "version": "0.3.2"
 }

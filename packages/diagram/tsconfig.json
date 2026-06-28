@@ -1,9 +1,12 @@
 {
   "compilerOptions": {
-    "lib": ["ESNext", "DOM"],
-    "strictNullChecks": true,
     "allowJs": true,
+    "lib": [
+      "ESNext",
+      "DOM"
+    ],
+    "module": "NodeNext",
     "noEmit": true,
-    "module": "NodeNext"
+    "strictNullChecks": true
   }
 }

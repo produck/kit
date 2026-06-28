@@ -3,7 +3,9 @@ import { chainOf } from './Iterator.mjs';
 export default function DiagramStack(kit) {
   const chain = [...chainOf(kit)].reverse();
 
-  if (chain.length === 0) return '';
+  if (chain.length === 0) {
+    return '';
+  }
 
   const OFFSET = 2;
   const boxes = chain.map((name, i) => ({
@@ -16,7 +18,9 @@ export default function DiagramStack(kit) {
   const grid = Array.from({ length: rows }, () => Array(cols).fill(' '));
 
   function merge(a, b) {
-    if (a === ' ') return b;
+    if (a === ' ') {
+      return b;
+    }
 
     const key = a + b;
     const map = { '─┌': '┬', '─┐': '┬', '┘─': '┴', '─┘': '┴' };

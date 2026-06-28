@@ -1,28 +1,32 @@
 {
-  "name": "@produck/kit",
-  "version": "0.3.1",
+  "author": "ChaosLee <chaos2lee@qq.com>",
+  "bugs": {
+    "url": "https://github.com/produck/kit/issues"
+  },
+  "dependencies": {
+    "@produck/ow": "^0.2.5",
+    "@produck/type-error": "^0.1.7"
+  },
   "description": "A useful dependency injection module.",
+  "exports": {
+    ".": {
+      "import": "./src/index.mjs",
+      "types": "./index.d.ts"
+    }
+  },
+  "files": [
+    "src",
+    "index.d.ts"
+  ],
+  "homepage": "https://github.com/produck/kit/tree/main/packages/kit#readme",
   "keywords": [
     "injection",
     "kit",
     "DI",
     "IoC"
   ],
-  "author": "ChaosLee <chaos2lee@qq.com>",
-  "homepage": "https://github.com/produck/kit/tree/main/packages/kit#readme",
   "license": "MIT",
-  "files": [
-    "src",
-    "index.d.ts"
-  ],
-  "types": "index.d.ts",
-  "type": "module",
-  "exports": {
-    ".": {
-      "types": "./index.d.ts",
-      "import": "./src/index.mjs"
-    }
-  },
+  "name": "@produck/kit",
   "publishConfig": {
     "access": "public"
   },
@@ -32,16 +36,12 @@
   },
   "scripts": {
     "build": "node script/meta.mjs",
-    "test": "npm run build && node test/index.mjs",
-    "test:only": "node --test-only test/index.mjs",
     "prepublishOnly": " npm run build",
-    "produck:coverage": "c8 --reporter=lcov --reporter=html --reporter=text-summary npm test"
+    "produck:coverage": "c8 --reporter=lcov --reporter=html --reporter=text-summary npm test",
+    "test": "npm run build && node test/index.mjs",
+    "test:only": "node --test-only test/index.mjs"
   },
-  "bugs": {
-    "url": "https://github.com/produck/kit/issues"
-  },
-  "dependencies": {
-    "@produck/ow": "^0.2.5",
-    "@produck/type-error": "^0.1.7"
-  }
+  "type": "module",
+  "types": "index.d.ts",
+  "version": "0.3.1"
 }
