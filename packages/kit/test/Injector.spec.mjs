@@ -16,15 +16,14 @@ describe('Injector::', function () {
       assert.throws(() => Kit.Injector(Kit.global, 'foo'), {
         name: 'TypeError',
         message:
-          'Invalid "args[1] as required", one "number | string | symbol[]" expected.',
+          'Invalid "args[1] as required", one "string | symbol[]" expected.',
       });
     });
 
-    it('should throw if a required element is not a valid property type.', function () {
+    it('should throw if a required element is not a valid dependence name.', function () {
       assert.throws(() => Kit.Injector(Kit.global, [true]), {
         name: 'TypeError',
-        message:
-          'Invalid "args[1][0]", one "number | string | symbol" expected.',
+        message: 'Invalid "args[1][0]", one "string | symbol" expected.',
       });
     });
 
@@ -44,15 +43,14 @@ describe('Injector::', function () {
       assert.ok(Kit.Injector(kit, []));
     });
 
-    it('should create an injector with all valid property types in required.', function () {
-      const kit = Kit.global('PropTypeTest');
+    it('should create an injector with all valid dependence names in required.', function () {
+      const kit = Kit.global('DepNameTest');
       const sym = Symbol('s');
 
       kit['strKey'] = 1;
-      kit[42] = 2;
       kit[sym] = 3;
 
-      assert.ok(Kit.Injector(kit, ['strKey', 42, sym]));
+      assert.ok(Kit.Injector(kit, ['strKey', sym]));
     });
   });
 

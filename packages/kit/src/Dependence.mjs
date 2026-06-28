@@ -1,15 +1,15 @@
 import { ThrowTypeError } from '@produck/type-error';
 
-const TYPE_LIST = ['number', 'string', 'symbol'];
+const TYPE_LIST = ['string', 'symbol'];
 
 export const DESCRIPTION = TYPE_LIST.join(' | ');
 
-export function isPropertyType(value) {
+export function isName(value) {
   return TYPE_LIST.includes(typeof value);
 }
 
-export function assertProperty(value, role) {
-  if (!isPropertyType(value)) {
+export function assertName(value, role) {
+  if (!isName(value)) {
     ThrowTypeError(role, DESCRIPTION);
   }
 }

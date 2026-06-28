@@ -5,19 +5,17 @@ import { Getter, global } from '../src/index.mjs';
 
 describe('Getter::', function () {
   describe('constructor', function () {
-    it('should throw if property is not a valid property type.', function () {
+    it('should throw if name is not a valid dependence name.', function () {
       assert.throws(() => Getter(true), {
         name: 'TypeError',
-        message:
-          'Invalid "args[0] as property", one "number | string | symbol" expected.',
+        message: 'Invalid "args[0] as name", one "string | symbol" expected.',
       });
     });
 
-    it('should throw if property is missing.', function () {
+    it('should throw if name is missing.', function () {
       assert.throws(() => Getter(), {
         name: 'TypeError',
-        message:
-          'Invalid "args[0] as property", one "number | string | symbol" expected.',
+        message: 'Invalid "args[0] as name", one "string | symbol" expected.',
       });
     });
 
@@ -34,13 +32,6 @@ describe('Getter::', function () {
       kit.foo = 42;
 
       assert.strictEqual(Getter('foo').use(kit), 42);
-    });
-
-    it('should return the value from kit for a numeric key.', function () {
-      const kit = global('GetterUseNum');
-      kit[0] = 'zero';
-
-      assert.strictEqual(Getter(0).use(kit), 'zero');
     });
 
     it('should return the value from kit for a symbol key.', function () {

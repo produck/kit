@@ -1,6 +1,6 @@
 import { ThrowTypeError } from '@produck/type-error';
 import { isKit } from './KitProxy.mjs';
-import * as Property from './Property.mjs';
+import * as Dependence from './Dependence.mjs';
 
 const I_KIT = Symbol('#kit');
 
@@ -11,11 +11,11 @@ export class KitInjector {
     }
 
     if (!Array.isArray(required)) {
-      ThrowTypeError('args[1] as required', `${Property.DESCRIPTION}[]`);
+      ThrowTypeError('args[1] as required', `${Dependence.DESCRIPTION}[]`);
     }
 
     for (const index in required) {
-      Property.assertProperty(required[index], `args[1][${index}]`);
+      Dependence.assertName(required[index], `args[1][${index}]`);
       void kit[required[index]];
     }
 

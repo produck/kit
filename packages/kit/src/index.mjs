@@ -1,4 +1,5 @@
 import { ThrowTypeError } from '@produck/type-error';
+import { isName as isDependenceName } from './Dependence.mjs';
 import { KitProxy, isKit, internals } from './KitProxy.mjs';
 import { KitInjector, defineRecipe } from './Injector.mjs';
 import { Getter } from './Getter.mjs';
@@ -38,4 +39,11 @@ export const setDiagram = useKitContextTo((context, diagram = null) => {
   context.diagram = diagram;
 });
 
-export { global, global as default, Getter, isKit, defineRecipe };
+export {
+  global,
+  global as default,
+  Getter,
+  isKit,
+  defineRecipe,
+  isDependenceName,
+};

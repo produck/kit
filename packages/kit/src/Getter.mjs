@@ -1,11 +1,11 @@
-import { assertProperty } from './Property.mjs';
+import * as Dependence from './Dependence.mjs';
 
-export function Getter(property) {
-  assertProperty(property, 'args[0] as property');
+export function Getter(name) {
+  Dependence.assertName(name, 'args[0] as name');
 
   return Object.freeze({
     use(kit) {
-      return kit[property];
+      return kit[name];
     },
     touch(kit) {
       try {
