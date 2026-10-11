@@ -3,6 +3,10 @@ import { ThrowTypeError } from '@produck/type-error';
 
 export const internals = new WeakMap();
 
+const _ = function stringifyName(value) {
+  return String(value);
+};
+
 const throws = (kit, message, Constructor = Error) => {
   const messages = [message];
   const { diagram } = internals.get(kit).context;
@@ -29,14 +33,14 @@ const PROXY_HANDLER = {
 
       return parent[property];
     } catch {
-      throws(Kit, `Dependence "${property}" is undefined.`, ReferenceError);
+      throws(Kit, `Dependence "${_(property)}" is undefined.`, ReferenceError);
     }
   },
   set: (_Kit, property, dependence, Kit) => {
     const { dependencies } = _Kit.context;
 
     if (property in dependencies) {
-      throws(Kit, `Dependence "${property}" exists.`);
+      throws(Kit, `Dependence "${_(property)}" exists.`);
     }
 
     dependencies[property] = dependence;

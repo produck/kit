@@ -35,10 +35,22 @@ describe('Kit::', function () {
     });
   });
 
+  it('should throw if set a duplicated symbol dep.', function () {
+    const kit = Kit.global('foo');
+    const secret = Symbol('secret');
+
+    kit[secret] = {};
+
+    assert.throws(() => (kit[secret] = 'baz'), {
+      name: 'Error',
+      message: 'Dependence "Symbol(secret)" exists.',
+    });
+  });
+
   it('should throw if accessing by symbol key.', function () {
     assert.throws(() => Kit.global()[Symbol()], {
-      name: 'TypeError',
-      message: 'Cannot convert a Symbol value to a string',
+      name: 'ReferenceError',
+      message: 'Dependence "Symbol()" is undefined.',
     });
   });
 
