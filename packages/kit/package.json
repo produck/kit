@@ -3,20 +3,20 @@
   "bugs": {
     "url": "https://github.com/produck/kit/issues"
   },
-  "dependencies": {
-    "@produck/ow": "^0.2.5",
-    "@produck/type-error": "^0.1.7"
-  },
   "description": "A useful dependency injection module.",
+  "devDependencies": {
+    "@produck/ow": "^0.2.0",
+    "@produck/package-meta-extractor": "^1.0.2",
+    "@produck/type-error": "^0.2.0"
+  },
   "exports": {
     ".": {
       "import": "./src/index.mjs",
-      "types": "./index.d.ts"
+      "types": "./src/index.d.mts"
     }
   },
   "files": [
-    "src",
-    "index.d.ts"
+    "src"
   ],
   "homepage": "https://github.com/produck/kit/tree/main/packages/kit#readme",
   "keywords": [
@@ -27,6 +27,10 @@
   ],
   "license": "MIT",
   "name": "@produck/kit",
+  "peerDependencies": {
+    "@produck/ow": "^0.2.0",
+    "@produck/type-error": "^0.2.0"
+  },
   "publishConfig": {
     "access": "public"
   },
@@ -41,7 +45,8 @@
     "test": "npm run build && node test/index.mjs",
     "test:only": "node --test-only test/index.mjs"
   },
+  "sideEffects": false,
   "type": "module",
-  "types": "index.d.ts",
+  "types": "src/index.d.mts",
   "version": "0.4.1"
 }

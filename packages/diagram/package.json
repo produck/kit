@@ -4,16 +4,18 @@
     "url": "https://github.com/produck/kit/issues"
   },
   "description": "ASCII relation diagrams for @produck/kit chain debugging.",
+  "devDependencies": {
+    "@produck/kit": "^0.4.0"
+  },
   "exports": {
     ".": {
       "import": "./index.mjs",
-      "types": "./index.d.ts"
+      "types": "./src/index.d.mts"
     }
   },
   "files": [
     "index.mjs",
-    "src",
-    "index.d.ts"
+    "src"
   ],
   "homepage": "https://github.com/produck/kit/tree/main/packages/diagram#readme",
   "keywords": [
@@ -26,7 +28,7 @@
   "license": "MIT",
   "name": "@produck/kit-diagram",
   "peerDependencies": {
-    "@produck/kit": ">=0.3.0"
+    "@produck/kit": "^0.4.0"
   },
   "publishConfig": {
     "access": "public"
@@ -40,7 +42,8 @@
     "test": "node test/index.mjs",
     "test:only": "node --test-only test/index.mjs"
   },
+  "sideEffects": false,
   "type": "module",
-  "types": "index.d.ts",
+  "types": "src/index.d.mts",
   "version": "0.3.3"
 }
