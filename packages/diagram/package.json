@@ -5,7 +5,7 @@
   },
   "description": "ASCII relation diagrams for @produck/kit chain debugging.",
   "devDependencies": {
-    "@produck/kit": "^0.4.0"
+    "@produck/kit": "^0.4.2"
   },
   "exports": {
     ".": {
@@ -45,5 +45,5 @@
   "sideEffects": false,
   "type": "module",
   "types": "src/index.d.mts",
-  "version": "0.3.3"
+  "version": "0.3.4"
 }
